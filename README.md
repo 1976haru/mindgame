@@ -5,6 +5,20 @@
 초등학생을 위한 정서 케어 게임. 광고 없음, 서버 없음, 오프라인 동작.
 Claude Code로 100% 개발 가능. 플레이스토어 출시 목표.
 
+**GitHub 저장소:** https://github.com/1976haru/mindgame
+
+---
+
+## 🛠 기술 스택
+
+- **React** 18 — UI 컴포넌트
+- **TypeScript** 5 — 정적 타입
+- **Vite** 5 — 개발 서버 / 번들러
+- **Zustand** — 전역 상태 관리
+- **Framer Motion** — 애니메이션
+- **idb (IndexedDB)** — 오프라인 로컬 저장
+- **Howler.js** — 사운드 (확장 예정)
+
 ---
 
 ## 🚀 빠른 실행 (Windows + PowerShell)
@@ -18,6 +32,29 @@ npm run dev
 ```
 
 브라우저가 자동으로 `http://localhost:5173` 으로 열립니다.
+
+### 프로덕션 빌드
+
+```powershell
+# dist/ 폴더에 정적 파일 생성
+npm run build
+
+# 빌드 결과 로컬 미리보기
+npm run preview
+```
+
+---
+
+## 🌐 배포 (GitHub Pages)
+
+`main` 브랜치에 push하면 `.github/workflows/deploy.yml` 워크플로우가 자동으로
+빌드 후 GitHub Pages에 배포합니다.
+
+- 배포 주소: **https://1976haru.github.io/mindgame/**
+- 최초 1회: GitHub 저장소 → **Settings → Pages → Build and deployment → Source** 를
+  **GitHub Actions** 로 설정해야 합니다.
+- `vite.config.ts` 의 `base: '/mindgame/'` 설정은 프로젝트 저장소 경로에 맞춰져 있습니다.
+  (Vercel 등 루트 도메인 배포 시에는 `base: '/'` 로 변경)
 
 ---
 
