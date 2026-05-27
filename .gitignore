@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+.DS_Store
+android
+ios
+.env
+.env.local
+*.log
+.vscode/
+.idea/
+*.tsbuildinfo
