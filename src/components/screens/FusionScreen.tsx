@@ -34,10 +34,10 @@ export function FusionScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, background: 'radial-gradient(ellipse at center,#241a4a 0%,#0f0f1e 70%)' }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button onClick={() => setScreen('garden')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>← 정원</button>
+        <button onClick={() => setScreen('garden')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>← 정원</button>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>✨ 별빛 합성</h2>
       </div>
-      <p style={{ color: 'var(--color-text-soft)', fontSize: 13, padding: '0 24px 8px' }}>같은 식물 3개를 모아 더 빛나는 식물로 진화시켜요</p>
+      <p style={{ color: 'var(--color-text-soft)', fontSize: 16, padding: '0 24px 8px' }}>같은 식물 3개를 모아 더 빛나는 식물로 진화시켜요</p>
 
       <div style={{ flex: 1, width: '100%', overflowY: 'auto', padding: '8px 16px 24px' }}>
         {fusable.length === 0 && (
@@ -55,11 +55,11 @@ export function FusionScreen() {
                 {[0, 1, 2].map(i => <div key={i} style={{ marginLeft: i ? -20 : 0 }}>{Comp && <Comp size={48} growProgress={1} />}</div>)}
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 700 }}>{sp.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--color-text-soft)' }}>{n}개 보유</div>
+                <div style={{ fontSize: 18, fontWeight: 700 }}>{sp.name}</div>
+                <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{n}개 보유</div>
               </div>
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => doFuse(id)}
-                style={{ padding: '10px 16px', borderRadius: 12, background: 'linear-gradient(135deg,#a855f7,#ec4899)', color: 'white', fontWeight: 700, fontSize: 14 }}>합성 ✨</motion.button>
+                style={{ padding: '10px 16px', borderRadius: 12, background: 'linear-gradient(135deg,#a855f7,#ec4899)', color: 'white', fontWeight: 700, fontSize: 16 }}>합성 ✨</motion.button>
             </div>
           )
         })}

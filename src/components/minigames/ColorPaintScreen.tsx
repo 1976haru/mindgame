@@ -31,11 +31,11 @@ export function ColorPaintScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>← 미니게임</button>
+        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>← 미니게임</button>
       </div>
       <div style={{ textAlign: 'center', padding: '0 24px 8px' }}>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>마음 색칠</h2>
-        <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>색을 고르고 그림을 톡톡 칠해보세요</p>
+        <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>색을 고르고 그림을 톡톡 칠해보세요</p>
       </div>
 
       {!done ? (
@@ -54,7 +54,7 @@ export function ColorPaintScreen() {
           {/* 진행 표시 */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap', padding: '0 16px' }}>
             {REGION_LABELS.map((label, i) => (
-              <span key={i} style={{ fontSize: 11, padding: '4px 8px', borderRadius: 999, background: fills[i] ? fills[i]! : 'rgba(255,255,255,0.08)', color: fills[i] ? '#1f2937' : 'var(--color-text-soft)' }}>{label}</span>
+              <span key={i} style={{ fontSize: 16, padding: '4px 8px', borderRadius: 999, background: fills[i] ? fills[i]! : 'rgba(255,255,255,0.08)', color: fills[i] ? '#1f2937' : 'var(--color-text-soft)' }}>{label}</span>
             ))}
           </div>
 
@@ -62,7 +62,7 @@ export function ColorPaintScreen() {
           <div style={{ width: '100%', padding: '8px 16px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
               {PALETTE.map(col => (
-                <button key={col} onClick={() => setSelected(col)} style={{ width: 38, height: 38, borderRadius: '50%', background: col, border: selected === col ? '3px solid white' : '3px solid transparent', boxShadow: selected === col ? '0 0 12px rgba(255,255,255,0.6)' : 'none' }} />
+                <button key={col} onClick={() => setSelected(col)} style={{ width: 56, height: 56, minHeight: 56, borderRadius: '50%', background: col, border: selected === col ? '4px solid white' : '4px solid transparent', boxShadow: selected === col ? '0 0 12px rgba(255,255,255,0.6)' : 'none' }} />
               ))}
             </div>
             <motion.button whileTap={{ scale: 0.96 }} disabled={!allFilled} onClick={finish}

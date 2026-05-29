@@ -27,11 +27,11 @@ export function GratitudeStarScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, background: 'radial-gradient(ellipse at top,#1a1a4a 0%,#0a0a1e 70%)' }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>← 미니게임</button>
+        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>← 미니게임</button>
       </div>
       <div style={{ textAlign: 'center', padding: '0 24px 8px' }}>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>감사 별찾기</h2>
-        <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>오늘 좋았던 일 3가지로 별자리를 만들어요</p>
+        <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>오늘 좋았던 일 3가지로 별자리를 만들어요</p>
       </div>
 
       {/* 밤하늘 + 별 */}
@@ -55,13 +55,13 @@ export function GratitudeStarScreen() {
           </motion.button>
         ))}
         {filled.map((f, i) => f && (
-          <div key={i} style={{ position: 'absolute', left: `${STAR_POS[i].x}%`, top: `${STAR_POS[i].y + 8}%`, transform: 'translateX(-50%)', fontSize: 11, color: '#fde68a', maxWidth: 120, textAlign: 'center' }}>{f}</div>
+          <div key={i} style={{ position: 'absolute', left: `${STAR_POS[i].x}%`, top: `${STAR_POS[i].y + 8}%`, transform: 'translateX(-50%)', fontSize: 16, color: '#fde68a', maxWidth: 120, textAlign: 'center' }}>{f}</div>
         ))}
 
         {done && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ position: 'absolute', bottom: '12%', left: 0, right: 0, textAlign: 'center', padding: '0 24px' }}>
             <p style={{ fontSize: 18, color: 'var(--color-accent)', fontFamily: 'var(--font-script)' }}>✨ 감사의 별자리 완성!</p>
-            <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>정원에 영원히 빛날 거예요 · 공감 +3 💜</p>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>정원에 영원히 빛날 거예요 · 공감 +3 💜</p>
           </motion.div>
         )}
       </div>
@@ -72,7 +72,7 @@ export function GratitudeStarScreen() {
           <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 340, background: 'var(--color-bg-soft)', borderRadius: 18, padding: 20 }}>
             <p style={{ textAlign: 'center', marginBottom: 12, color: 'var(--color-text)' }}>오늘 좋았던 일 한 가지</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
-              {PRESETS.map(p => <button key={p} onClick={() => save(p)} style={{ fontSize: 12, padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text-soft)' }}>{p}</button>)}
+              {PRESETS.map(p => <button key={p} onClick={() => save(p)} style={{ fontSize: 16, padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text-soft)' }}>{p}</button>)}
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <input autoFocus value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && save(input)} placeholder="직접 적기" maxLength={30}

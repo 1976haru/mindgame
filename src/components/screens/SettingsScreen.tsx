@@ -47,7 +47,7 @@ export function SettingsScreen() {
               style={{ flex: 1, padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: 'none' }} />
             <button onClick={() => { if (/^\d{2}-\d{2}$/.test(birthInput)) setBirthday(birthInput) }} style={{ padding: '0 16px', borderRadius: 10, background: 'var(--color-primary)', color: 'white', fontWeight: 700 }}>저장</button>
           </div>
-          {game.birthday && <span style={{ fontSize: 12, color: 'var(--color-green)' }}>등록됨: {game.birthday} 🎉</span>}
+          {game.birthday && <span style={{ fontSize: 16, color: 'var(--color-green)' }}>등록됨: {game.birthday} 🎉</span>}
         </div>
 
         {/* 부모 PIN */}
@@ -58,7 +58,7 @@ export function SettingsScreen() {
               style={{ flex: 1, padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: 'none', letterSpacing: 4 }} />
             <button onClick={() => { if (pinInput.length === 4) { setParentPin(pinInput); setPinInput('') } }} style={{ padding: '0 16px', borderRadius: 10, background: 'var(--color-primary)', color: 'white', fontWeight: 700 }}>저장</button>
           </div>
-          <button onClick={() => setScreen('parentReport')} style={{ padding: '10px', borderRadius: 10, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)', fontSize: 14 }}>📊 부모 리포트 보기</button>
+          <button onClick={() => setScreen('parentReport')} style={{ padding: '10px', borderRadius: 10, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)', fontSize: 16 }}>📊 부모 리포트 보기</button>
         </div>
 
         {/* 데이터 초기화 */}
@@ -70,7 +70,7 @@ export function SettingsScreen() {
         </div>
 
         {/* 앱 정보 */}
-        <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--color-text-soft)', fontSize: 12, lineHeight: 1.7 }}>
+        <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--color-text-soft)', fontSize: 16, lineHeight: 1.7 }}>
           <p>마음 정원: 솔로몬의 후계자 v2.0</p>
           <p>{profile?.name}님과 함께한 정원 💚</p>
           <p style={{ opacity: 0.6 }}>광고·추적 없는 안전한 어린이 앱</p>

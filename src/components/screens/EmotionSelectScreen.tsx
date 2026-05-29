@@ -26,7 +26,7 @@ export function EmotionSelectScreen() {
         }}>
           지금 어떤 마음이야?
         </h2>
-        <p style={{ color: 'var(--color-text-soft)', fontSize: 15 }}>
+        <p style={{ color: 'var(--color-text-soft)', fontSize: 18 }}>
           제일 가까운 마음을 골라봐
         </p>
       </motion.div>
@@ -70,7 +70,7 @@ export function EmotionSelectScreen() {
         style={{
           marginTop: 24,
           color: 'var(--color-text-soft)',
-          fontSize: 15
+          fontSize: 18
         }}
       >
         ← 정원으로 돌아가기

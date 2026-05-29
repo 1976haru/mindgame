@@ -20,7 +20,7 @@ export function EpisodeListScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
       <div style={{ width: '100%', padding: '18px 20px 8px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button onClick={() => setScreen('kingdom')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>←</button>
+        <button onClick={() => setScreen('kingdom')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>←</button>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>
           {activeDomain ? `${DOMAIN_ICONS[activeDomain as keyof typeof DOMAIN_ICONS] || ''} ${activeDomain}` : '솔로몬 재판소'}
         </h2>
@@ -47,15 +47,15 @@ export function EpisodeListScreen() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, color: diff.color, marginBottom: 2 }}>{diff.label}</div>
+                  <div style={{ fontSize: 16, color: diff.color, marginBottom: 2 }}>{diff.label}</div>
                   <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--color-text)' }}>
                     {!unlocked && '🔒 '}{ep.title}
                   </div>
-                  <div style={{ fontSize: 12, color: 'var(--color-text-soft)', marginTop: 2 }}>{ep.question}</div>
+                  <div style={{ fontSize: 16, color: 'var(--color-text-soft)', marginTop: 2 }}>{ep.question}</div>
                 </div>
                 <div style={{ fontSize: 26, marginLeft: 8 }}>{isCleared ? '🏆' : unlocked ? '⚖️' : '🔒'}</div>
               </div>
-              {isCleared && <div style={{ marginTop: 6, fontSize: 13, color: 'var(--color-accent)' }}>⭐⭐⭐ 해결 완료!</div>}
+              {isCleared && <div style={{ marginTop: 6, fontSize: 16, color: 'var(--color-accent)' }}>⭐⭐⭐ 해결 완료!</div>}
             </motion.button>
           )
         })}

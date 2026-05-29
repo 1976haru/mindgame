@@ -33,7 +33,7 @@ export function GardenScreen() {
           <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>
             {profile?.name}의 정원
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>
+          <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>
             🌱 {entries.length}개의 마음 · 🔥 {game.streak}일 연속
           </p>
         </div>
@@ -93,12 +93,12 @@ export function GardenScreen() {
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
         style={{ padding: '12px 20px 8px', width: '100%', display: 'flex', gap: 10 }}>
         <motion.button whileTap={{ scale: 0.96 }} onClick={() => setScreen('minigames')}
-          style={{ padding: '16px', fontSize: 15, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)' }}>
+          style={{ padding: '16px', fontSize: 18, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)' }}>
           🎮
         </motion.button>
         {canFuse && (
           <motion.button whileTap={{ scale: 0.96 }} onClick={() => setScreen('fusion')}
-            style={{ padding: '16px', fontSize: 15, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'linear-gradient(135deg,#a855f7,#ec4899)', color: 'white' }}>
+            style={{ padding: '16px', fontSize: 18, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'linear-gradient(135deg,#a855f7,#ec4899)', color: 'white' }}>
             ✨
           </motion.button>
         )}

@@ -15,7 +15,7 @@ export function MinigamesScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
       <div style={{ width: '100%', padding: '18px 20px 8px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button onClick={() => { visitArea('minigames'); setScreen('garden') }} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>←</button>
+        <button onClick={() => { visitArea('minigames'); setScreen('garden') }} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>←</button>
         <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>🎮 미니게임</h2>
       </div>
 
@@ -29,7 +29,7 @@ export function MinigamesScreen() {
             <div style={{ fontSize: 40 }}>{g.icon}</div>
             <div>
               <div style={{ fontSize: 19, fontWeight: 700, color: 'var(--color-text)' }}>{g.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{g.desc}</div>
+              <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{g.desc}</div>
             </div>
           </motion.button>
         ))}

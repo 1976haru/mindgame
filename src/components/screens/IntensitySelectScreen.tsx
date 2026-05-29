@@ -82,7 +82,7 @@ export function IntensitySelectScreen() {
         <p style={{
           color: 'var(--color-text-soft)',
           marginBottom: 32,
-          fontSize: 15,
+          fontSize: 18,
           minHeight: 22
         }}>
           {['아주 조금', '조금', '보통', '많이', '아주 많이'][intensity - 1]}
@@ -110,7 +110,7 @@ export function IntensitySelectScreen() {
           style={{
             marginTop: 16,
             color: 'var(--color-text-soft)',
-            fontSize: 14
+            fontSize: 16
           }}
         >
           ← 다시 고르기

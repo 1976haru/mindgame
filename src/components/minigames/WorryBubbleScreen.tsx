@@ -35,13 +35,13 @@ export function WorryBubbleScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, background: 'linear-gradient(180deg,#1a2747 0%,#0f0f1e 100%)' }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>← 미니게임</button>
-        <span style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>터뜨린 걱정 {popped}개</span>
+        <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>← 미니게임</button>
+        <span style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>터뜨린 걱정 {popped}개</span>
       </div>
 
       <div style={{ textAlign: 'center', padding: '0 24px 8px' }}>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>걱정 비눗방울</h2>
-        <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>걱정을 비눗방울에 담아 펑! 터뜨려요</p>
+        <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>걱정을 비눗방울에 담아 펑! 터뜨려요</p>
       </div>
 
       {/* 떠오르는 비눗방울 영역 */}
@@ -54,7 +54,7 @@ export function WorryBubbleScreen() {
               onClick={() => pop(b.id)}
               style={{ position: 'absolute', left: `${b.x}%`, width: 100, height: 100, borderRadius: '50%',
                 background: 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.5), rgba(147,197,253,0.35) 60%, rgba(124,92,255,0.25))',
-                border: '1px solid rgba(255,255,255,0.4)', color: 'white', fontSize: 12, padding: 6, lineHeight: 1.3, backdropFilter: 'blur(2px)' }}>
+                border: '1px solid rgba(255,255,255,0.4)', color: 'white', fontSize: 16, padding: 6, lineHeight: 1.3, backdropFilter: 'blur(2px)' }}>
               {b.text}
             </motion.button>
           ))}
@@ -64,7 +64,7 @@ export function WorryBubbleScreen() {
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ position: 'absolute', top: '40%', left: 0, right: 0, textAlign: 'center', padding: '0 24px' }}>
             <div style={{ fontSize: 40 }}>🎉</div>
             <p style={{ fontSize: 18, color: 'var(--color-accent)', fontFamily: 'var(--font-script)' }}>고생했어! 걱정이 가벼워졌어요</p>
-            <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>공감 에너지 +3 💜</p>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>공감 에너지 +3 💜</p>
           </motion.div>
         )}
       </div>
@@ -73,7 +73,7 @@ export function WorryBubbleScreen() {
       <div style={{ width: '100%', padding: '8px 16px 24px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
           {PRESETS.map(p => (
-            <button key={p} onClick={() => addBubble(p)} style={{ fontSize: 12, padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text-soft)' }}>{p}</button>
+            <button key={p} onClick={() => addBubble(p)} style={{ fontSize: 16, padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text-soft)' }}>{p}</button>
           ))}
         </div>
         <div style={{ display: 'flex', gap: 8 }}>

@@ -91,7 +91,7 @@ export function PlantGrowingScreen() {
               textAlign: 'center'
             }}
           >
-            <p style={{ fontSize: 14, color: 'var(--color-text-soft)', marginBottom: 4 }}>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)', marginBottom: 4 }}>
               새 식물이 자랐어요!
             </p>
             <h3 style={{
@@ -102,12 +102,12 @@ export function PlantGrowingScreen() {
             }}>
               {species.name}
             </h3>
-            <p style={{ fontSize: 14, color: 'var(--color-text-soft)', lineHeight: 1.5, marginBottom: 16 }}>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)', lineHeight: 1.5, marginBottom: 16 }}>
               {species.flavorText}
             </p>
             {recommend && solomonMet && (
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => setScreen(recommend.screen)}
-                style={{ display: 'block', width: '100%', marginBottom: 10, padding: '10px', fontSize: 14, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)' }}>
+                style={{ display: 'block', width: '100%', marginBottom: 10, padding: '10px', fontSize: 16, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)' }}>
                 {recommend.label}
               </motion.button>
             )}

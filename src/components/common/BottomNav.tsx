@@ -30,7 +30,7 @@ export function BottomNav() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '4px 14px', borderRadius: 14, background: active ? 'rgba(124,92,255,0.22)' : 'transparent' }}
           >
             <span style={{ fontSize: 22, filter: active ? 'none' : 'grayscale(0.4) opacity(0.7)' }}>{tab.icon}</span>
-            <span style={{ fontSize: 11, color: active ? 'var(--color-accent)' : 'var(--color-text-soft)', fontWeight: active ? 700 : 400 }}>{tab.label}</span>
+            <span style={{ fontSize: 16, color: active ? 'var(--color-accent)' : 'var(--color-text-soft)', fontWeight: active ? 700 : 400 }}>{tab.label}</span>
           </motion.button>
         )
       })}

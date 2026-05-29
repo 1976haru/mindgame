@@ -32,7 +32,7 @@ export function ParentReportScreen() {
         <input value={pinInput} onChange={e => setPinInput(e.target.value.replace(/\D/g, ''))} maxLength={4} inputMode="numeric" placeholder="숫자 4자리"
           style={{ padding: '12px 16px', borderRadius: 12, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: 'none', letterSpacing: 6, textAlign: 'center', fontSize: 20, marginBottom: 16 }} />
         <button onClick={() => { if (pinInput.length === 4) { setParentPin(pinInput); setAuthed(true) } }} style={{ padding: '12px 28px', borderRadius: 'var(--radius-md)', background: 'var(--color-primary)', color: 'white', fontWeight: 700 }}>등록하기</button>
-        <button onClick={() => setScreen('settings')} style={{ marginTop: 14, color: 'var(--color-text-soft)', fontSize: 14 }}>← 돌아가기</button>
+        <button onClick={() => setScreen('settings')} style={{ marginTop: 14, color: 'var(--color-text-soft)', fontSize: 16 }}>← 돌아가기</button>
       </div>
     )
   }
@@ -44,9 +44,9 @@ export function ParentReportScreen() {
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)', marginBottom: 16 }}>부모 확인</h2>
         <input value={pinInput} onChange={e => setPinInput(e.target.value.replace(/\D/g, ''))} onKeyDown={e => e.key === 'Enter' && tryAuth()} maxLength={4} inputMode="numeric" placeholder="PIN 4자리"
           style={{ padding: '12px 16px', borderRadius: 12, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: 'none', letterSpacing: 6, textAlign: 'center', fontSize: 20, marginBottom: 12 }} />
-        {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 8 }}>{error}</p>}
+        {error && <p style={{ color: '#f87171', fontSize: 16, marginBottom: 8 }}>{error}</p>}
         <button onClick={tryAuth} style={{ padding: '12px 28px', borderRadius: 'var(--radius-md)', background: 'var(--color-primary)', color: 'white', fontWeight: 700 }}>확인</button>
-        <button onClick={() => setScreen('settings')} style={{ marginTop: 14, color: 'var(--color-text-soft)', fontSize: 14 }}>← 돌아가기</button>
+        <button onClick={() => setScreen('settings')} style={{ marginTop: 14, color: 'var(--color-text-soft)', fontSize: 16 }}>← 돌아가기</button>
       </div>
     )
   }
@@ -70,7 +70,7 @@ export function ParentReportScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button onClick={() => setScreen('settings')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>←</button>
+        <button onClick={() => setScreen('settings')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>←</button>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>📊 주간 리포트</h2>
       </div>
 
@@ -82,14 +82,14 @@ export function ParentReportScreen() {
           <div style={cardTitle}>이번 주 감정 분포</div>
           {EMOTION_LIST.filter(e => counts[e.type] > 0).map(e => (
             <div key={e.type} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-              <span style={{ width: 64, fontSize: 13 }}>{e.emoji} {e.label}</span>
+              <span style={{ width: 64, fontSize: 16 }}>{e.emoji} {e.label}</span>
               <div style={{ flex: 1, height: 14, borderRadius: 8, background: 'rgba(255,255,255,0.08)' }}>
                 <motion.div initial={{ width: 0 }} animate={{ width: `${(counts[e.type] / total) * 100}%` }} style={{ height: '100%', borderRadius: 8, background: e.color }} />
               </div>
-              <span style={{ width: 24, fontSize: 12, color: 'var(--color-text-soft)', textAlign: 'right' }}>{counts[e.type]}</span>
+              <span style={{ width: 24, fontSize: 16, color: 'var(--color-text-soft)', textAlign: 'right' }}>{counts[e.type]}</span>
             </div>
           ))}
-          {weekEntries.length === 0 && <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>이번 주 기록이 아직 없어요.</p>}
+          {weekEntries.length === 0 && <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>이번 주 기록이 아직 없어요.</p>}
         </div>
 
         {/* TOP 3 */}
@@ -100,7 +100,7 @@ export function ParentReportScreen() {
               {top3.map((e, i) => (
                 <div key={e.type} style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 32 }}>{e.emoji}</div>
-                  <div style={{ fontSize: 13, color: e.color, fontWeight: 700 }}>{i + 1}. {e.label}</div>
+                  <div style={{ fontSize: 16, color: e.color, fontWeight: 700 }}>{i + 1}. {e.label}</div>
                 </div>
               ))}
             </div>
@@ -110,10 +110,10 @@ export function ParentReportScreen() {
         {/* 법교육 진행 */}
         <div style={card}>
           <div style={cardTitle}>법교육 진행 ({game.clearedEpisodes.length}/15)</div>
-          {game.clearedEpisodes.length === 0 ? <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>아직 해결한 사건이 없어요.</p> : (
+          {game.clearedEpisodes.length === 0 ? <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>아직 해결한 사건이 없어요.</p> : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {game.clearedEpisodes.map(id => EPISODE_BY_ID[id]).filter(Boolean).map(ep => (
-                <div key={ep.id} style={{ fontSize: 13 }}>✅ {ep.title} <span style={{ color: 'var(--color-text-soft)' }}>· {ep.lawPrinciple}</span></div>
+                <div key={ep.id} style={{ fontSize: 16 }}>✅ {ep.title} <span style={{ color: 'var(--color-text-soft)' }}>· {ep.lawPrinciple}</span></div>
               ))}
             </div>
           )}
@@ -124,22 +124,22 @@ export function ParentReportScreen() {
           <div style={cardTitle}>획득한 영웅 카드 ({game.unlockedHeroes.length}/15)</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {game.unlockedHeroes.map(id => getHeroById(id)).filter(Boolean).map(h => (
-              <span key={h!.id} style={{ fontSize: 12, background: 'rgba(251,191,36,0.15)', borderRadius: 999, padding: '4px 10px' }}>🏅 {h!.name}</span>
+              <span key={h!.id} style={{ fontSize: 16, background: 'rgba(251,191,36,0.15)', borderRadius: 999, padding: '4px 10px' }}>🏅 {h!.name}</span>
             ))}
-            {game.unlockedHeroes.length === 0 && <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>아직 없어요.</p>}
+            {game.unlockedHeroes.length === 0 && <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>아직 없어요.</p>}
           </div>
         </div>
 
         {/* 인사이트 */}
         <div style={{ ...card, background: 'linear-gradient(135deg, rgba(124,92,255,0.2), rgba(255,158,199,0.15))' }}>
           <div style={cardTitle}>💡 이번 주 인사이트</div>
-          <p style={{ fontSize: 14, lineHeight: 1.6 }}>{insight}</p>
-          <p style={{ fontSize: 12, color: 'var(--color-text-soft)', marginTop: 8 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.6 }}>{insight}</p>
+          <p style={{ fontSize: 16, color: 'var(--color-text-soft)', marginTop: 8 }}>
             아이와 함께 가장 많이 느낀 감정에 대해 이야기를 나눠보세요. "오늘 어떤 마음이 가장 컸어?"
           </p>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--color-text-soft)', marginTop: 12, opacity: 0.6 }}>
+        <p style={{ textAlign: 'center', fontSize: 16, color: 'var(--color-text-soft)', marginTop: 12, opacity: 0.6 }}>
           모든 기록은 기기 안에만 저장돼요. 외부로 전송되지 않습니다.
         </p>
       </div>
@@ -148,4 +148,4 @@ export function ParentReportScreen() {
 }
 
 const card: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 16, marginBottom: 12 }
-const cardTitle: React.CSSProperties = { fontSize: 14, fontWeight: 700, color: 'var(--color-text)', marginBottom: 10 }
+const cardTitle: React.CSSProperties = { fontSize: 16, fontWeight: 700, color: 'var(--color-text)', marginBottom: 10 }

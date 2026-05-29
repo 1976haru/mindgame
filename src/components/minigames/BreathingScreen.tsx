@@ -60,16 +60,16 @@ export function BreathingScreen() {
     return (
       <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
         <div style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>← 미니게임</button>
+          <button onClick={() => setScreen('minigames')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>← 미니게임</button>
           <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>🫧 호흡 풍선</h2>
         </div>
-        <p style={{ color: 'var(--color-text-soft)', fontSize: 14, padding: '0 24px 12px' }}>어떤 호흡을 해볼까요?</p>
+        <p style={{ color: 'var(--color-text-soft)', fontSize: 16, padding: '0 24px 12px' }}>어떤 호흡을 해볼까요?</p>
         <div style={{ flex: 1, padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {MODES.map(m => (
             <motion.button key={m.id} whileTap={{ scale: 0.97 }} onClick={() => { setMode(m); setPhaseIdx(0); setCycleCount(0) }}
               style={{ textAlign: 'left', padding: 18, borderRadius: 16, background: 'rgba(124,92,255,0.12)', border: '2px solid rgba(124,92,255,0.3)' }}>
               <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--color-text)' }}>{m.name}</div>
-              <div style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{m.desc}</div>
+              <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{m.desc}</div>
             </motion.button>
           ))}
         </div>
@@ -99,8 +99,8 @@ export function BreathingScreen() {
   return (
     <div className="screen">
       <div style={{ position: 'absolute', top: 24, left: 24, right: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => setMode(null)} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', fontSize: 14 }}>← 모드</button>
-        <p style={{ fontSize: 14, color: 'var(--color-text-soft)' }}>{cycleCount}/3회</p>
+        <button onClick={() => setMode(null)} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', fontSize: 16 }}>← 모드</button>
+        <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{cycleCount}/3회</p>
       </div>
 
       <motion.div animate={{ scale: balloonScale }} transition={{ duration: phase.duration / 1000, ease: 'easeInOut' }}
@@ -114,7 +114,7 @@ export function BreathingScreen() {
         <p style={{ color: 'var(--color-text-soft)', fontSize: 17, lineHeight: 1.5 }}>{phase.instruction}</p>
       </motion.div>
 
-      <button onClick={() => setScreen('garden')} style={{ position: 'absolute', bottom: 32, padding: '12px 28px', borderRadius: 'var(--radius-md)', background: 'rgba(255, 255, 255, 0.1)', color: 'var(--color-text)', fontSize: 15 }}>그만하기</button>
+      <button onClick={() => setScreen('garden')} style={{ position: 'absolute', bottom: 32, padding: '12px 28px', borderRadius: 'var(--radius-md)', background: 'rgba(255, 255, 255, 0.1)', color: 'var(--color-text)', fontSize: 18 }}>그만하기</button>
     </div>
   )
 }

@@ -1,16 +1,40 @@
+/* ===== 폰트 (어린이 친화 둥근 폰트) =====
+   - Pretendard / Jua : Google Fonts·jsdelivr CDN (확실히 로드됨)
+   - Cafe24Ssurround / ONE-Mobile-POP / BMJUA : 눈누 CDN (@font-face)
+   로드 실패 시 폴백 폰트로 자연스럽게 대체됩니다. */
+@font-face {
+  font-family: 'Cafe24Ssurround';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Cafe24Ssurround.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BMJUA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/BMJUA.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ONE-Mobile-POP';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/ONEMobilePOP.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
 :root {
   --color-bg: #0f0f1e;
   --color-bg-soft: #1a1a2e;
   --color-text: #f5f5f7;
-  --color-text-soft: #b8b8d4;
+  --color-text-soft: #d0d0e8;   /* 어두운 배경 대비 강화 (기존 #b8b8d4) */
   --color-primary: #7c5cff;
   --color-accent: #ffd84d;
   --color-pink: #ff9ec7;
   --color-green: #6ee7b7;
   --color-blue: #93c5fd;
 
-  --font-display: 'Gaegu', 'Apple SD Gothic Neo', sans-serif;
-  --font-script: 'Nanum Pen Script', cursive;
+  /* 본문: 둥근 어린이 폰트 / 제목: 귀엽고 큼직한 Cafe24 Ssurround */
+  --font-display: 'BMJUA', 'ONE-Mobile-POP', 'Jua', 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  --font-script: 'Cafe24Ssurround', 'Jua', 'BMJUA', 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
 
   --radius-sm: 12px;
   --radius-md: 20px;
@@ -32,6 +56,8 @@ html, body, #root {
   width: 100%;
   overflow: hidden;
   font-family: var(--font-display);
+  font-size: 18px;            /* 본문 기본 크기 (저학년 가독성) */
+  line-height: 1.65;
   background: var(--color-bg);
   color: var(--color-text);
   user-select: none;
@@ -39,16 +65,26 @@ html, body, #root {
   touch-action: manipulation;
 }
 
+/* 제목/본문 기본 크기 (인라인 스타일이 없을 때의 기준값) */
+h1 { font-size: 36px; line-height: 1.4; font-family: var(--font-script); }
+h2 { font-size: 28px; line-height: 1.4; font-family: var(--font-script); }
+h3 { font-size: 22px; line-height: 1.5; }
+p  { font-size: 18px; line-height: 1.65; }
+
 button {
   font-family: inherit;
   cursor: pointer;
   border: none;
   background: none;
   color: inherit;
+  font-size: 20px;            /* 버튼 기본 글자 크기 */
+  min-height: 56px;           /* 터치 영역 최소 높이 */
+  line-height: 1.3;
 }
 
 input {
   font-family: inherit;
+  font-size: 18px;
 }
 
 /* 별이 빛나는 배경 (정원의 밤하늘) */

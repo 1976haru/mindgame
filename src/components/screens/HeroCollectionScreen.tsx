@@ -14,10 +14,10 @@ export function HeroCollectionScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, overflowY: 'auto' }}>
       <div style={{ width: '100%', padding: '20px 20px 8px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button onClick={() => setScreen('collection')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>←</button>
+        <button onClick={() => setScreen('collection')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>←</button>
         <div>
           <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>영웅 카드 도감</h2>
-          <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{unlocked.length} / {HEROES.length}명의 영웅을 만났어요</p>
+          <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{unlocked.length} / {HEROES.length}명의 영웅을 만났어요</p>
         </div>
       </div>
 

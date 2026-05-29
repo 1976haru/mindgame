@@ -54,14 +54,14 @@ export function CourtroomScreen() {
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, background: 'linear-gradient(180deg,#16162e 0%,#0f0f1e 100%)' }}>
       {/* 상단: 닫기 + 스텝 표시 */}
       <div style={{ width: '100%', padding: '16px 18px 8px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button onClick={() => setScreen('episodeList')} style={{ padding: '6px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 13 }}>✕</button>
+        <button onClick={() => setScreen('episodeList')} style={{ padding: '6px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>✕</button>
         <div style={{ flex: 1, display: 'flex', gap: 6 }}>
           {STEPS.map((s, i) => (
             <div key={s} style={{ flex: 1, height: 5, borderRadius: 4, background: i <= stepNum ? 'var(--color-accent)' : 'rgba(255,255,255,0.12)' }} />
           ))}
         </div>
       </div>
-      <p style={{ fontSize: 13, color: 'var(--color-text-soft)', padding: '0 18px 6px' }}>⚖️ {ep.title}</p>
+      <p style={{ fontSize: 16, color: 'var(--color-text-soft)', padding: '0 18px 6px' }}>⚖️ {ep.title}</p>
 
       <div style={{ flex: 1, width: '100%', overflowY: 'auto', padding: '8px 18px 24px', display: 'flex', flexDirection: 'column' }}>
         <AnimatePresence mode="wait">
@@ -72,7 +72,7 @@ export function CourtroomScreen() {
               <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 16, padding: '18px 22px', maxWidth: 360, fontSize: 18, lineHeight: 1.6 }}>
                 {ep.situation[panelIdx].caption}
               </div>
-              <p style={{ fontSize: 12, color: 'var(--color-text-soft)' }}>{panelIdx + 1} / {ep.situation.length}</p>
+              <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{panelIdx + 1} / {ep.situation.length}</p>
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
                 if (panelIdx < ep.situation.length - 1) setPanelIdx(panelIdx + 1)
                 else setStep('plea')
@@ -83,14 +83,14 @@ export function CourtroomScreen() {
           {/* 2. 호소 */}
           {step === 'plea' && (
             <motion.div key="plea" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16 }}>
-              <p style={{ textAlign: 'center', color: 'var(--color-text-soft)', fontSize: 14 }}>두 친구의 이야기를 들어봐요</p>
+              <p style={{ textAlign: 'center', color: 'var(--color-text-soft)', fontSize: 16 }}>두 친구의 이야기를 들어봐요</p>
               {ep.characters.map((c, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.3 }}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, flexDirection: i % 2 ? 'row-reverse' : 'row' }}>
                   <AnimalAvatar id={c.avatar} size={80} mood={i % 2 ? 'sad' : 'normal'} />
                   <div style={{ flex: 1, background: i % 2 ? 'rgba(255,158,199,0.14)' : 'rgba(124,92,255,0.14)', borderRadius: 16, padding: '12px 16px' }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-accent)', marginBottom: 2 }}>{c.name}</div>
-                    <div style={{ fontSize: 15, lineHeight: 1.5 }}>"{c.plea}"</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-accent)', marginBottom: 2 }}>{c.name}</div>
+                    <div style={{ fontSize: 18, lineHeight: 1.5 }}>"{c.plea}"</div>
                   </div>
                 </motion.div>
               ))}
@@ -117,7 +117,7 @@ export function CourtroomScreen() {
                   {['①', '②', '③'][i]} {c.text}
                 </motion.button>
               ))}
-              {wrongPick !== null && <p style={{ textAlign: 'center', color: '#f87171', fontSize: 14 }}>음... 다시 한 번 생각해볼까요? 🤔</p>}
+              {wrongPick !== null && <p style={{ textAlign: 'center', color: '#f87171', fontSize: 16 }}>음... 다시 한 번 생각해볼까요? 🤔</p>}
             </motion.div>
           )}
 
@@ -128,10 +128,10 @@ export function CourtroomScreen() {
               <SpeechBubble text={ep.explanation} speed={28} onDone={() => setExplainDone(true)} />
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: explainDone ? 1 : 0 }} style={{ width: '100%', maxWidth: 360 }}>
                 <div style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', borderRadius: 14, padding: '12px 16px', color: '#1f2937', textAlign: 'center', marginBottom: 6 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, opacity: 0.7 }}>오늘의 법 원리</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, opacity: 0.7 }}>오늘의 법 원리</div>
                   <div style={{ fontSize: 16, fontWeight: 700 }}>📜 {ep.lawPrinciple}</div>
                 </div>
-                {ep.realLaw && <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--color-text-soft)' }}>관련 법: {ep.realLaw}</p>}
+                {ep.realLaw && <p style={{ textAlign: 'center', fontSize: 16, color: 'var(--color-text-soft)' }}>관련 법: {ep.realLaw}</p>}
                 <motion.button whileTap={{ scale: 0.95 }} onClick={goVerdict} style={{ ...btn, marginTop: 10 }}>판결 선언 ⚖️</motion.button>
               </motion.div>
             </motion.div>
@@ -142,18 +142,18 @@ export function CourtroomScreen() {
             <motion.div key="verdict" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 14 }}>
               <motion.div initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring' }} style={{ fontSize: 70 }}>⚖️</motion.div>
               <h2 style={{ fontSize: 26, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>판결!</h2>
-              <p style={{ textAlign: 'center', color: 'var(--color-text-soft)', fontSize: 14 }}>현명한 판단이었어요. 왕국에 빛이 돌아옵니다 ✨</p>
+              <p style={{ textAlign: 'center', color: 'var(--color-text-soft)', fontSize: 16 }}>현명한 판단이었어요. 왕국에 빛이 돌아옵니다 ✨</p>
 
               {hero && (
                 <motion.div initial={{ scale: 0, rotateY: 180 }} animate={{ scale: 1, rotateY: 0 }} transition={{ delay: 0.3, type: 'spring' }}>
-                  <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--color-accent)', marginBottom: 6 }}>🎴 새로운 영웅 카드 획득!</p>
+                  <p style={{ textAlign: 'center', fontSize: 16, color: 'var(--color-accent)', marginBottom: 6 }}>🎴 새로운 영웅 카드 획득!</p>
                   <HeroCard hero={hero} width={210} />
                 </motion.div>
               )}
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-                {building && <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 14px', fontSize: 14 }}>{building.icon} {building.name} 건설 가능!</div>}
-                <div style={{ background: 'rgba(124,92,255,0.2)', borderRadius: 12, padding: '8px 14px', fontSize: 14, color: 'var(--color-accent)' }}>💜 공감 +{reward?.reward}</div>
+                {building && <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 14px', fontSize: 16 }}>{building.icon} {building.name} 건설 가능!</div>}
+                <div style={{ background: 'rgba(124,92,255,0.2)', borderRadius: 12, padding: '8px 14px', fontSize: 16, color: 'var(--color-accent)' }}>💜 공감 +{reward?.reward}</div>
               </motion.div>
 
               <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} whileTap={{ scale: 0.95 }}

@@ -39,7 +39,7 @@ export function SolomonIntroScreen() {
       {!bridge ? (
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }} style={{ marginBottom: 48, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
           <SpeechBubble key={idx} text={text} onDone={() => setTypingDone(true)} />
-          <p style={{ fontSize: 13, color: 'var(--color-text-soft)', opacity: typingDone ? 1 : 0.4 }}>
+          <p style={{ fontSize: 16, color: 'var(--color-text-soft)', opacity: typingDone ? 1 : 0.4 }}>
             {typingDone ? (isLast ? '화면을 눌러 시작하기 ✨' : '화면을 눌러 계속 →') : '...'}
           </p>
         </motion.div>

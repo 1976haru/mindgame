@@ -34,7 +34,7 @@ export function FriendVisitScreen() {
           padding: '0 24px'
         }}
       >
-        <p style={{ fontSize: 14, color: 'var(--color-text-soft)', marginBottom: 8 }}>
+        <p style={{ fontSize: 16, color: 'var(--color-text-soft)', marginBottom: 8 }}>
           {profile?.name}이를 보러 왔어요
         </p>
         <h3 style={{

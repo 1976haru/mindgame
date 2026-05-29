@@ -32,7 +32,7 @@ export function CollectionScreen() {
       <div style={{ display: 'flex', gap: 8, padding: '8px 16px', width: '100%' }}>
         {([['plants', '🌱 식물'], ['friends', '🐾 친구'], ['heroes', '🃏 영웅']] as [Tab, string][]).map(([t, label]) => (
           <button key={t} onClick={() => setTab(t)} style={{
-            flex: 1, padding: '10px', borderRadius: 12, fontSize: 14, fontWeight: 700,
+            flex: 1, padding: '10px', borderRadius: 12, fontSize: 16, fontWeight: 700,
             background: tab === t ? 'rgba(124,92,255,0.3)' : 'rgba(255,255,255,0.06)',
             color: tab === t ? 'var(--color-accent)' : 'var(--color-text-soft)'
           }}>{label}</button>
@@ -42,7 +42,7 @@ export function CollectionScreen() {
       <div style={{ flex: 1, width: '100%', overflowY: 'auto', padding: '8px 16px 16px' }}>
         {tab === 'plants' && (
           <>
-            <p style={{ fontSize: 13, color: 'var(--color-text-soft)', marginBottom: 10 }}>{discoveredPlants.size} / {PLANT_SPECIES.length} 종 발견</p>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)', marginBottom: 10 }}>{discoveredPlants.size} / {PLANT_SPECIES.length} 종 발견</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
               {PLANT_SPECIES.map(p => {
                 const found = discoveredPlants.has(p.id)
@@ -55,10 +55,10 @@ export function CollectionScreen() {
                     <div style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', filter: found ? 'none' : 'brightness(0) opacity(0.25)' }}>
                       {Comp && <Comp size={56} growProgress={1} />}
                     </div>
-                    <div style={{ fontSize: 10, color: found ? 'var(--color-text)' : 'var(--color-text-soft)', marginTop: 4, lineHeight: 1.2 }}>
+                    <div style={{ fontSize: 16, color: found ? 'var(--color-text)' : 'var(--color-text-soft)', marginTop: 4, lineHeight: 1.2 }}>
                       {found ? p.name : '???'}
                     </div>
-                    {found && <div style={{ fontSize: 8, color: RARITY_COLOR[p.rarity] }}>{RARITY_LABEL[p.rarity]}</div>}
+                    {found && <div style={{ fontSize: 16, color: RARITY_COLOR[p.rarity] }}>{RARITY_LABEL[p.rarity]}</div>}
                   </motion.div>
                 )
               })}
@@ -76,8 +76,8 @@ export function CollectionScreen() {
                   <div style={{ height: 90, display: 'flex', alignItems: 'center', justifyContent: 'center', filter: met ? 'none' : 'brightness(0) opacity(0.25)' }}>
                     {Comp && <Comp size={80} />}
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: met ? 'var(--color-text)' : 'var(--color-text-soft)' }}>{met ? f.name : '???'}</div>
-                  {met && <div style={{ fontSize: 11, color: 'var(--color-text-soft)', marginTop: 2 }}>{f.description}</div>}
+                  <div style={{ fontSize: 16, fontWeight: 700, color: met ? 'var(--color-text)' : 'var(--color-text-soft)' }}>{met ? f.name : '???'}</div>
+                  {met && <div style={{ fontSize: 16, color: 'var(--color-text-soft)', marginTop: 2 }}>{f.description}</div>}
                 </div>
               )
             })}

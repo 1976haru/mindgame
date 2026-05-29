@@ -36,7 +36,7 @@ export function MyLawbookScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0, background: 'linear-gradient(180deg,#2a2440 0%,#0f0f1e 100%)' }}>
       <div style={{ width: '100%', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <button onClick={() => setScreen('kingdom')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 14 }}>←</button>
+        <button onClick={() => setScreen('kingdom')} style={{ padding: '8px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.1)', fontSize: 16 }}>←</button>
         <h2 style={{ fontSize: 22, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>📖 내 마음의 법전</h2>
       </div>
 
@@ -45,19 +45,19 @@ export function MyLawbookScreen() {
           {!isCert && ep ? (
             <motion.div key={page} initial={{ opacity: 0, rotateY: 30 }} animate={{ opacity: 1, rotateY: 0 }} exit={{ opacity: 0, rotateY: -30 }}
               style={{ flex: 1, background: 'rgba(255,250,240,0.96)', color: '#3a2e2e', borderRadius: 16, padding: 22, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: 13, color: '#9ca3af' }}>제 {page + 1} 장 · {ep.title}</div>
+              <div style={{ fontSize: 16, color: '#9ca3af' }}>제 {page + 1} 장 · {ep.title}</div>
               <div style={{ fontSize: 20, fontWeight: 700, margin: '8px 0', color: '#7c3aed' }}>📜 {ep.lawPrinciple}</div>
-              {hero && <div style={{ fontSize: 14, marginBottom: 8 }}>🏅 함께한 영웅: <b>{hero.name}</b> — "{hero.quote}"</div>}
-              <p style={{ fontSize: 14, lineHeight: 1.5, color: '#4b5563', flex: 1 }}>{ep.explanation}</p>
+              {hero && <div style={{ fontSize: 16, marginBottom: 8 }}>🏅 함께한 영웅: <b>{hero.name}</b> — "{hero.quote}"</div>}
+              <p style={{ fontSize: 16, lineHeight: 1.5, color: '#4b5563', flex: 1 }}>{ep.explanation}</p>
               {/* 다짐 */}
               <div style={{ marginTop: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>✍️ 나의 다짐</div>
+                <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>✍️ 나의 다짐</div>
                 {savedVow ? (
-                  <div style={{ background: '#ede9fe', borderRadius: 10, padding: '10px 12px', fontSize: 14, fontStyle: 'italic' }}>"{savedVow}"</div>
+                  <div style={{ background: '#ede9fe', borderRadius: 10, padding: '10px 12px', fontSize: 16, fontStyle: 'italic' }}>"{savedVow}"</div>
                 ) : (
                   <div style={{ display: 'flex', gap: 6 }}>
                     <input value={vowInput} onChange={e => setVowInput(e.target.value)} placeholder="이 법을 어떻게 지킬까요?" maxLength={40}
-                      style={{ flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid #ddd', fontSize: 14 }} />
+                      style={{ flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid #ddd', fontSize: 16 }} />
                     <button onClick={() => { if (vowInput.trim()) { setLawbookVow(ep.id, vowInput.trim()); setVowInput('') } }}
                       style={{ padding: '0 14px', borderRadius: 10, background: '#7c3aed', color: 'white', fontWeight: 700 }}>적기</button>
                   </div>
@@ -80,7 +80,7 @@ export function MyLawbookScreen() {
         {/* 페이지 네비 */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 4px' }}>
           <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0} style={{ padding: '10px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', opacity: page === 0 ? 0.3 : 1 }}>← 이전</button>
-          <span style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{page + 1} / {allCleared ? learned.length + 1 : learned.length}</span>
+          <span style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{page + 1} / {allCleared ? learned.length + 1 : learned.length}</span>
           <button onClick={() => setPage(Math.min((allCleared ? learned.length : learned.length - 1), page + 1))} disabled={page >= (allCleared ? learned.length : learned.length - 1)} style={{ padding: '10px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', opacity: page >= (allCleared ? learned.length : learned.length - 1) ? 0.3 : 1 }}>다음 →</button>
         </div>
       </div>

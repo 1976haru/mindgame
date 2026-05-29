@@ -35,7 +35,7 @@ export function KingdomScreen() {
       <div style={{ width: '100%', padding: '18px 20px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>솔로몬 왕국</h2>
-          <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{game.clearedEpisodes.length} / 15 사건 해결</p>
+          <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{game.clearedEpisodes.length} / 15 사건 해결</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(124,92,255,0.2)', padding: '8px 14px', borderRadius: 999 }}>
           <span style={{ fontSize: 18 }}>💜</span>
@@ -48,7 +48,7 @@ export function KingdomScreen() {
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             style={{ background: 'linear-gradient(135deg,#7c5cff,#ffd84d)', borderRadius: 16, padding: 16, textAlign: 'center', marginBottom: 12 }}>
             <p style={{ fontWeight: 700, fontSize: 16 }}>👑 왕국에 공감의 빛이 모두 돌아왔어요!</p>
-            <button onClick={() => setScreen('myLawbook')} style={{ marginTop: 8, padding: '8px 18px', borderRadius: 999, background: 'rgba(0,0,0,0.25)', color: 'white', fontSize: 14 }}>내 법전 보기 📖</button>
+            <button onClick={() => setScreen('myLawbook')} style={{ marginTop: 8, padding: '8px 18px', borderRadius: 999, background: 'rgba(0,0,0,0.25)', color: 'white', fontSize: 16 }}>내 법전 보기 📖</button>
           </motion.div>
         )}
 
@@ -75,7 +75,7 @@ export function KingdomScreen() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--color-text)' }}>{DOMAIN_ICONS[area.domain]} {area.name}</div>
-                    <div style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>{area.domain} · {clearedCount}/{eps.length} 해결</div>
+                    <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{area.domain} · {clearedCount}/{eps.length} 해결</div>
                   </div>
                   <div style={{ fontSize: 28 }}>{restored ? '✨' : light > 0 ? '🌥️' : '🌑'}</div>
                 </div>
@@ -91,7 +91,7 @@ export function KingdomScreen() {
         {/* 건설 가능한 건물 */}
         {buildable.length > 0 && (
           <>
-            <h3 style={{ fontSize: 15, color: 'var(--color-text)', margin: '20px 4px 8px' }}>🔨 건설 가능</h3>
+            <h3 style={{ fontSize: 18, color: 'var(--color-text)', margin: '20px 4px 8px' }}>🔨 건설 가능</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {buildable.map(b => {
                 const affordable = game.empathyEnergy >= b.cost
@@ -99,12 +99,12 @@ export function KingdomScreen() {
                   <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 12 }}>
                     <span style={{ fontSize: 26 }}>{b.icon}</span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700 }}>{b.name}</div>
-                      <div style={{ fontSize: 12, color: 'var(--color-text-soft)' }}>{b.description}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700 }}>{b.name}</div>
+                      <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{b.description}</div>
                     </div>
                     <motion.button whileTap={affordable ? { scale: 0.92 } : {}} disabled={!affordable}
                       onClick={() => buildBuilding(b.id, b.cost)}
-                      style={{ padding: '8px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap',
+                      style={{ padding: '8px 12px', borderRadius: 10, fontSize: 16, fontWeight: 700, whiteSpace: 'nowrap',
                         background: affordable ? 'linear-gradient(135deg,#7c5cff,#a855f7)' : 'rgba(255,255,255,0.08)',
                         color: affordable ? 'white' : 'var(--color-text-soft)' }}>
                       💜 {b.cost}
@@ -117,15 +117,15 @@ export function KingdomScreen() {
         )}
 
         {/* 건설된 건물 */}
-        <h3 style={{ fontSize: 15, color: 'var(--color-text)', margin: '20px 4px 8px' }}>🏗️ 건설한 건물 ({game.builtBuildings.length}/15)</h3>
+        <h3 style={{ fontSize: 18, color: 'var(--color-text)', margin: '20px 4px 8px' }}>🏗️ 건설한 건물 ({game.builtBuildings.length}/15)</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {BUILDINGS.filter(b => game.builtBuildings.includes(b.id)).map(b => (
-            <div key={b.id} style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 12px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div key={b.id} style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 12px', fontSize: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 18 }}>{b.icon}</span>{b.name}
             </div>
           ))}
           {game.builtBuildings.length === 0 && (
-            <p style={{ fontSize: 13, color: 'var(--color-text-soft)' }}>사건을 해결하면 건물을 지을 수 있어요.</p>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>사건을 해결하면 건물을 지을 수 있어요.</p>
           )}
         </div>
       </div>
