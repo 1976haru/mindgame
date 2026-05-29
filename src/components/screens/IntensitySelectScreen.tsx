@@ -10,6 +10,7 @@ export function IntensitySelectScreen() {
   const setPendingEmotion = useAppStore(s => s.setPendingEmotion)
   const addEntry = useAppStore(s => s.addEntry)
   const setScreen = useAppStore(s => s.setScreen)
+  const unlockedLegendaries = useAppStore(s => s.game.unlockedLegendaries)
   const [intensity, setIntensity] = useState(pendingEmotion?.intensity || 3)
 
   if (!pendingEmotion) {
@@ -20,7 +21,7 @@ export function IntensitySelectScreen() {
   const emotion = EMOTIONS[pendingEmotion.type]
 
   const handleConfirm = async () => {
-    const plant = getPlantForEmotion(pendingEmotion.type, intensity)
+    const plant = getPlantForEmotion(pendingEmotion.type, intensity, unlockedLegendaries)
     const entry = {
       id: uuid(),
       date: todayString(),

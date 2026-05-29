@@ -4,10 +4,13 @@ import { useAppStore } from '../../store/appStore'
 import { PLANT_SPECIES } from '../../data/plants'
 import { PLANT_COMPONENTS } from '../plants/PlantComponents'
 import { getFriendForEmotion } from '../../data/friends'
+import { isNightTime } from '../../utils/timeUtils'
+import { playSound } from '../../utils/sound'
 
 export function PlantGrowingScreen() {
   const lastEntry = useAppStore(s => s.lastEntry)
   const setScreen = useAppStore(s => s.setScreen)
+  const solomonMet = useAppStore(s => s.game.solomonMet)
   const [grow, setGrow] = useState(0)
   const [showInfo, setShowInfo] = useState(false)
 
@@ -15,7 +18,7 @@ export function PlantGrowingScreen() {
     if (!lastEntry) return
     const t1 = setTimeout(() => setGrow(0.3), 400)
     const t2 = setTimeout(() => setGrow(0.7), 1200)
-    const t3 = setTimeout(() => setGrow(1), 2000)
+    const t3 = setTimeout(() => { setGrow(1); playSound('grow') }, 2000)
     const t4 = setTimeout(() => setShowInfo(true), 2800)
     return () => { [t1, t2, t3, t4].forEach(clearTimeout) }
   }, [lastEntry])
@@ -23,12 +26,25 @@ export function PlantGrowingScreen() {
   if (!lastEntry) return null
   const PlantComp = PLANT_COMPONENTS[lastEntry.plantId]
   const species = PLANT_SPECIES.find(p => p.id === lastEntry.plantId)
-  const friend = getFriendForEmotion(lastEntry.emotion)
+  const friend = getFriendForEmotion(lastEntry.emotion, isNightTime())
 
   const handleNext = () => {
-    if (friend) setScreen('friendVisit')
+    // 첫 식물 후 솔로몬이 처음 등장 (와! ④)
+    if (!solomonMet) setScreen('solomonIntro')
+    else if (friend) setScreen('friendVisit')
     else setScreen('garden')
   }
+
+  // 감정별 미니게임 추천
+  const recommend: { screen: 'breathing' | 'worryBubble' | 'gratitudeStar' | 'colorPaint'; label: string } | null = (() => {
+    switch (lastEntry.emotion) {
+      case 'angry': return { screen: 'breathing', label: '🫧 호흡으로 마음 가라앉히기' }
+      case 'fear': return { screen: 'worryBubble', label: '💭 걱정 비눗방울 터뜨리기' }
+      case 'sad': return { screen: 'worryBubble', label: '💭 걱정 비눗방울 터뜨리기' }
+      case 'bored': return { screen: 'gratitudeStar', label: '🌟 감사 별찾기' }
+      default: return { screen: 'colorPaint', label: '🎨 마음 색칠하기' }
+    }
+  })()
 
   return (
     <div className="screen">
@@ -89,6 +105,12 @@ export function PlantGrowingScreen() {
             <p style={{ fontSize: 14, color: 'var(--color-text-soft)', lineHeight: 1.5, marginBottom: 16 }}>
               {species.flavorText}
             </p>
+            {recommend && solomonMet && (
+              <motion.button whileTap={{ scale: 0.95 }} onClick={() => setScreen(recommend.screen)}
+                style={{ display: 'block', width: '100%', marginBottom: 10, padding: '10px', fontSize: 14, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)' }}>
+                {recommend.label}
+              </motion.button>
+            )}
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleNext}

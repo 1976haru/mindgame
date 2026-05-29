@@ -1,286 +1,124 @@
-# 🌱 마음 정원 (Mind Garden)
+# 🌳 마음 정원: 솔로몬의 후계자 (Mind Garden v2.0)
 
-> 아이의 감정이 자라는 곳. 매일 3분, 마음을 표현하면 정원이 살아납니다.
+> **"감정을 이해하는 마음이 모든 법의 뿌리다."**
+>
+> 아이들의 감정이 자라는 정원에서, 공감의 빛으로 솔로몬 왕국을 되살리는 정서·법교육 게임.
 
-초등학생을 위한 정서 케어 게임. 광고 없음, 서버 없음, 오프라인 동작.
-Claude Code로 100% 개발 가능. 플레이스토어 출시 목표.
-
-**GitHub 저장소:** https://github.com/1976haru/mindgame
-
----
-
-## 🛠 기술 스택
-
-- **React** 18 — UI 컴포넌트
-- **TypeScript** 5 — 정적 타입
-- **Vite** 5 — 개발 서버 / 번들러
-- **Zustand** — 전역 상태 관리
-- **Framer Motion** — 애니메이션
-- **idb (IndexedDB)** — 오프라인 로컬 저장
-- **Howler.js** — 사운드 (확장 예정)
+초등학교 1~6학년을 위한 **정서 케어 + 기초 법교육 + 시민의식 + 한국 위인** 통합 앱입니다.
+**광고·추적·외부 서버 전송이 전혀 없는** 안전한 어린이 앱(COPPA·정보통신망법 준수)으로, 모든 데이터는 기기 안(IndexedDB)에만 저장됩니다.
 
 ---
 
-## 🚀 빠른 실행 (Windows + PowerShell)
+## 🌟 핵심 컨셉 — 평행 세계
 
-```powershell
-# 1. 의존성 설치
+마음 정원에서 감정을 키우면 **공감 에너지**가 모이고, 그 에너지로 **솔로몬 왕국(법나라)** 의 다툼을 해결합니다.
+
+> 어느 날 꿈에 황금 부엉이 **솔로몬**이 나타나, 사라져 가는 왕국의 '공감의 빛'을 되살려 달라고 부탁합니다.
+> 아이는 매일 마음을 심고, 솔로몬 재판소에서 동물 친구들의 분쟁을 지혜롭게 판결하며 왕국을 부활시킵니다.
+
+> 💡 솔로몬의 지혜로운 재판이라는 모티프를 차용해, 어린이가 일상 속 갈등을 '공정·약속·존중'의 눈으로 판단하도록 설계했습니다.
+
+---
+
+## 🎮 v2.0 콘텐츠
+
+| 영역 | v1.0 | v2.0 |
+|------|------|------|
+| 식물 | 8종 | **60종** (전설 16종 포함, 8감정 × 강도 매트릭스) |
+| 친구 | 2마리 | **8마리** (감정별 동물 친구 + 비밀 유니콘) |
+| 영웅 카드 | 0 | **15장** (한국 위인, 5개 도메인) |
+| 법교육 에피소드 | 0 | **15편** (난이도 3단계: 🟢쉬움·🟡보통·🔴깊음) |
+| 미니게임 | 1 | **4종** (호흡·걱정 비눗방울·감사 별찾기·마음 색칠) |
+| 와! 모먼트 | 3 | **8종** |
+
+### 🌱 식물 (60종)
+8가지 감정(기쁨·슬픔·화남·무서움·설렘·뿌듯·심심·평온)별로 강도 1~5에 따라 다른 식물이 자랍니다.
+희귀도 `common → rare → epic → legendary` 로 갈수록 화려한 시각 효과와 더 많은 공감 에너지를 줍니다.
+전설 식물 16종은 특별한 조건(연속 출석, 감정 전환, 재판소 클리어 등)으로 잠금 해제됩니다.
+
+### 🃏 한국 위인 영웅 카드 (15장)
+각 위인은 **법·정의·공정·약속**의 상징입니다. 재판소 에피소드를 클리어하면 획득합니다.
+
+- **기초질서**: 세종대왕, 정약용, 장영실
+- **약속과 책임**: 이순신, 안중근, 유관순
+- **공정과 차별**: 허준, 신사임당, 박성춘
+- **권리와 의무**: 김구, 이회영, 을지문덕
+- **안전과 보호**: 을파소, 안창호, 김만덕
+
+### ⚖️ 솔로몬 재판소 (법교육 15 에피소드)
+각 사건은 **상황 → 인물의 호소 → 선택 → 솔로몬의 해설 → 판결+보상** 5단계로 진행됩니다.
+실제 법 원리(평등권, 신의성실, 초상권, 학교폭력예방법 등)를 어린이 눈높이로 풀어 가르칩니다.
+
+1. 줄서기 대소동 · 2. 횡단보도의 약속 · 3. 도서관에서 시끄러운 친구
+4. 빌린 책을 잃어버린 친구 · 5. 거짓말이 만든 큰 사건 · 6. 약속 시간에 늦은 친구
+7. 사다리는 누구에게? · 8. 여자아이는 축구하면 안 돼? · 9. 가난을 놀리는 친구들
+10. 표현의 자유, 어디까지? · 11. 돈으로 친구를 사도 될까? · 12. 청소를 떠넘기는 친구
+13. 괴롭힘을 본 친구 · 14. 이상한 어른의 부탁 · 15. 어려움에 빠진 친구(최종)
+
+### 🎮 미니게임 (정서조절 도구)
+- **🫧 호흡 풍선**: 박스호흡 / 4-7-8 / 별빛호흡(저학년) 3가지 모드 + 차분 거북이 칭찬
+- **💭 걱정 비눗방울**: 걱정을 적어 비눗방울에 담고 펑! 터뜨리기
+- **🌟 감사 별찾기**: 오늘 좋았던 일 3가지로 별자리 만들기
+- **🎨 마음 색칠**: 나만의 식물을 색칠해 정원에 영구 저장
+
+### ✨ 와! 모먼트
+정원 깨어남 · 식물 성장 · 친구 등장 · 솔로몬 첫 만남 · 영웅 카드 획득 · 별빛 합성 · 보물상자 · 밤의 정원/계절 이벤트
+
+---
+
+## 🛠️ 기술 스택
+- **React 18 + TypeScript (strict)** · **Vite**
+- **Zustand** (상태 관리) · **idb / IndexedDB** (로컬 영구 저장)
+- **framer-motion** (애니메이션) · **howler** (효과음, 선택)
+- 한글 폰트: Gaegu, Nanum Pen Script
+
+## 🚀 실행
+```bash
 npm install
-
-# 2. 개발 서버 실행
-npm run dev
+npm run dev       # 개발 서버
+npm run build     # 프로덕션 빌드 (tsc -b && vite build)
+npm run preview   # 빌드 미리보기
 ```
 
-브라우저가 자동으로 `http://localhost:5173` 으로 열립니다.
+## 🔊 사운드 (선택 사항)
+효과음 파일은 `public/sounds/` 에 넣습니다(`pop/grow/correct/wrong/verdict/treasure/sparkle/fusion.mp3`).
+**파일이 없어도 게임은 정상 동작**합니다(사운드만 비활성).
 
-### 프로덕션 빌드
-
-```powershell
-# dist/ 폴더에 정적 파일 생성
+## 📱 Android 빌드 (Capacitor)
+```bash
 npm run build
+npx cap add android
+npx cap sync android
+npx cap open android   # Android Studio에서 APK 빌드
+```
+Play Store 등록 시 만 13세 미만 대상 앱은 '가족 정책'·콘텐츠 등급을 준수하세요. 본 앱은 광고·추적·인앱결제·외부 통신이 없습니다.
 
-# 빌드 결과 로컬 미리보기
-npm run preview
+## 👨‍👩‍👧 부모/교사용
+- **설정 → 부모 PIN** 등록 후 **주간 리포트**(감정 분포, TOP 3, 클리어한 에피소드, 획득 영웅, 자동 인사이트)를 볼 수 있습니다.
+- 모든 기록은 기기 안에만 저장되며 외부로 전송되지 않습니다.
+- 활용 팁: 리포트를 보며 아이와 "오늘 어떤 마음이 가장 컸어?"처럼 감정을 함께 이야기해 보세요.
+
+## 🔒 어린이 보호 원칙
+- 광고·추적·외부 서버 코드 없음
+- 폭력·공포·성적 콘텐츠 없음 (영웅의 희생 등은 "훌륭한 일을 하셨어요" 수준으로만)
+- 저학년 친화 한글(받침 어려운 단어·한자어 풀어쓰기)
+
+## 📂 디렉터리
+```
+src/
+  data/        emotions, plants(60), friends(8), heroes(15), episodes(15), buildings(15)
+  components/
+    plants/    감정별 식물 SVG + 색칠 식물
+    friends/   친구 8마리 SVG
+    heroes/    영웅 카드 + 위인 초상
+    characters/솔로몬 부엉이 · 동물 캐릭터
+    screens/   화면 (정원·왕국·재판소·도감·설정·리포트 등)
+    minigames/ 호흡·걱정·감사·색칠
+    common/    BottomNav · GardenAmbience · ErrorBoundary
+  store/       appStore (Zustand) — 게임 상태/액션
+  utils/       storage(IndexedDB) · gameLogic · time/season · sound
 ```
 
 ---
 
-## 🌐 배포 (GitHub Pages)
-
-`main` 브랜치에 push하면 `.github/workflows/deploy.yml` 워크플로우가 자동으로
-빌드 후 GitHub Pages에 배포합니다.
-
-- 배포 주소: **https://1976haru.github.io/mindgame/**
-- 최초 1회: GitHub 저장소 → **Settings → Pages → Build and deployment → Source** 를
-  **GitHub Actions** 로 설정해야 합니다.
-- `vite.config.ts` 의 `base: '/mindgame/'` 설정은 프로젝트 저장소 경로에 맞춰져 있습니다.
-  (Vercel 등 루트 도메인 배포 시에는 `base: '/'` 로 변경)
-
----
-
-## 📁 프로젝트 구조
-
-```
-mind-garden/
-├── src/
-│   ├── components/
-│   │   ├── plants/           # 식물 SVG (8종 → 확장 예정 60종)
-│   │   ├── friends/          # 친구 SVG (2종 → 확장 예정 8종)
-│   │   ├── screens/          # 화면 컴포넌트
-│   │   └── minigames/        # 미니게임 (1종 → 확장 예정 4종)
-│   ├── data/
-│   │   ├── emotions.ts       # 8가지 감정 정의
-│   │   ├── plants.ts         # 식물 도감
-│   │   └── friends.ts        # 친구 도감
-│   ├── store/
-│   │   └── appStore.ts       # Zustand 전역 상태
-│   ├── utils/
-│   │   ├── storage.ts        # IndexedDB
-│   │   └── helpers.ts
-│   ├── styles/
-│   │   └── global.css
-│   ├── App.tsx               # 화면 라우터
-│   └── main.tsx
-├── package.json
-└── README.md
-```
-
----
-
-## ✨ MVP 1.0에 구현된 것
-
-✅ 이름 입력 → 정원 깨어남 (와! 모먼트 ①)
-✅ 8가지 감정 선택 (기쁨/슬픔/화남/무서움/설렘/뿌듯/심심/평온)
-✅ 별 1~5개로 강도 표현
-✅ 감정에 맞는 식물 자람 애니메이션 (와! 모먼트 ②)
-✅ 친구 등장 (와! 모먼트 ③, 슬픔/무서움 → 위로 토끼, 기쁨/설렘/뿌듯 → 축하 나비)
-✅ 자란 식물이 정원에 누적
-✅ 호흡 풍선 미니게임 (박스 호흡)
-✅ IndexedDB 오프라인 저장
-✅ 모바일 최적화 디자인
-
----
-
-## 🤖 Claude Code로 확장하기 (복붙용 프롬프트)
-
-각 영역을 Claude Code에 그대로 붙여넣으면 일관된 패턴으로 확장됩니다.
-
-### 1️⃣ 식물 60종 확장
-
-```
-@src/data/plants.ts 와 @src/components/plants/PlantComponents.tsx 를 참고해서
-식물 도감을 60종으로 확장해줘.
-
-규칙:
-- 8가지 감정(joy/sad/angry/fear/excited/proud/bored/calm) 각각 7~8종씩
-- 강도(1~5) 구간을 나눠서 다양한 식물이 나오도록
-- 희귀도: common 60%, rare 25%, epic 12%, legendary 3%
-- 각 식물마다 PLANT_COMPONENTS에 SVG 컴포넌트 추가
-- 기존 8종 패턴을 그대로 따라가되, 색감과 모양은 감정에 맞게 창의적으로
-- 어린이가 좋아할 만한 귀엽고 따뜻한 디자인
-- flavorText는 정서적으로 위로/응원/축하가 되는 문장으로
-
-getPlantForEmotion 함수도 희귀도 가중치 추첨 로직으로 업데이트해줘.
-```
-
-### 2️⃣ 친구 8마리 확장
-
-```
-@src/data/friends.ts 와 @src/components/friends/FriendComponents.tsx 를 참고해서
-친구를 8마리로 확장해줘.
-
-추가할 친구:
-1. 응원 다람쥐 - proud, excited (도전 후 도토리 선물)
-2. 차분 거북이 - angry (깊은 숨 같이 쉬어줌, 호흡 게임 추천)
-3. 용기 여우 - fear (손전등으로 어둠 비춰줌)
-4. 호기심 부엉이 - 새 감정 처음 표현 시 등장 (모든 감정)
-5. 꿈꾸는 고래 - calm, bored (밤 시간대만)
-6. 비밀 유니콘 - 30일 출석 시 1회 등장 (레어)
-
-각 친구마다:
-- 감정-친구 매칭 규칙 (triggerEmotions)
-- 어울리는 멘트 (greeting)
-- SVG 컴포넌트 (애니메이션 포함, motion 활용)
-- FRIEND_COMPONENTS 매핑 추가
-
-getFriendForEmotion 함수가 여러 친구 중 가중 랜덤으로 고르도록 개선.
-```
-
-### 3️⃣ 미니게임 3종 추가
-
-```
-@src/components/minigames/BreathingScreen.tsx 의 패턴을 따라서
-3개의 미니게임을 추가해줘.
-
-추가할 게임:
-1. WorryBubbleScreen.tsx - 걱정 비눗방울 (불안/무서움)
-   - 화면 하단 입력창에 걱정 적기 → 비눗방울에 담겨 떠오름 → 탭하면 터지며 사라짐
-   - 5개 터뜨리면 완료
-
-2. GratitudeStarScreen.tsx - 감사 별찾기 (슬픔/심심)
-   - 밤하늘에 별 3개 떠 있음, 각 별 탭하면 "오늘 좋았던 것" 입력창
-   - 3개 다 채우면 별자리가 빛나며 연결됨
-
-3. ColorPaintScreen.tsx - 마음 색칠 (화남/혼란)
-   - 빈 식물 윤곽선에 색칠 (탭하면 색이 칠해짐)
-   - 8색 팔레트, 완성하면 정원에 저장
-
-각 게임은 GardenScreen 하단에 진입 버튼 추가.
-감정 입력 후 PlantGrowingScreen에서 해당 감정이면 미니게임 추천 모달 띄우기.
-```
-
-### 4️⃣ 기억의 나무 (7일 출석 보상)
-
-```
-새 기능: 기억의 나무
-
-@src/store/appStore.ts 에 다음 추가:
-- 출석일 수 계산 (entries의 unique date 카운트)
-- 7일 이상 → 기억의 나무 잠금 해제
-
-@src/components/screens/GardenScreen.tsx 의 정원 중앙에 큰 나무 추가:
-- 잠금 해제 전: 작은 묘목 회색
-- 7일+: 큰 나무, 가지에 그동안 자란 식물들이 별처럼 매달림
-- 탭하면 새 화면 MemoryTreeScreen.tsx
-  - 한 달 캘린더 + 각 날짜에 그날의 감정 식물 미니
-  - 별 탭하면 그날의 entry detail (날짜, 감정, note)
-```
-
-### 5️⃣ 사운드 추가 (Howler.js)
-
-```
-@public/sounds/ 폴더에 효과음 추가 후 (Freesound나 Pixabay에서 다운로드):
-- seed_fall.mp3 (씨앗 떨어짐)
-- plant_grow.mp3 (식물 자람)
-- sparkle.mp3 (반짝)
-- friend_arrive.mp3 (친구 등장)
-- breathe_in.mp3, breathe_out.mp3 (호흡)
-- bgm_garden.mp3 (배경음악, 부드러운 피아노 루프)
-
-@src/utils/sound.ts 를 만들어서 Howl 인스턴스 캐싱.
-playSound(name) 헬퍼 함수 export.
-각 화면에서 적절한 타이밍에 호출.
-
-설정 화면에서 음소거 토글 가능하게.
-```
-
-### 6️⃣ Capacitor로 Android APK 빌드
-
-```
-이 프로젝트를 Android 앱으로 만들기 위한 Capacitor 설정을 추가해줘:
-
-1. capacitor 패키지 설치 (@capacitor/core, @capacitor/cli, @capacitor/android)
-2. capacitor.config.ts 생성 (appId: com.mindgarden.app, appName: 마음 정원)
-3. npm run build → npx cap add android → npx cap sync 흐름 안내
-4. Android Studio에서 열어서 APK/AAB 빌드하는 단계 README에 추가
-5. 앱 아이콘과 스플래시 이미지를 위한 가이드
-6. 화면 회전 비활성화 (세로 고정), 상태바 색상 설정
-```
-
-### 7️⃣ 부모 리포트 (확장 수익화)
-
-```
-주간 리포트 화면 추가:
-
-@src/components/screens/ParentReportScreen.tsx
-- 지난 7일 감정 분포 도넛 차트
-- 가장 자주 나타난 감정 TOP 3
-- AI 인사이트 영역 (현재는 룰베이스, 추후 Claude API)
-- "○○이는 이번 주에 ___을 가장 많이 느꼈어요" 같은 문장
-- PIN 잠금으로 부모만 접근 (4자리)
-
-설정 화면에서 PIN 등록/변경 가능.
-```
-
----
-
-## 🎯 개발 일정
-
-| 주차 | 작업 |
-|------|------|
-| **0주 (지금)** | MVP 1.0 (이 ZIP) |
-| 1주 | 식물 60종 확장 |
-| 2주 | 친구 8마리 + 미니게임 3종 |
-| 3주 | 기억의 나무, 사운드 |
-| 4주 | 부모 리포트, 설정 화면 |
-| 5주 | Capacitor 빌드, 테스트 |
-| 6주 | Play Console 등록 (심사 1~2주) |
-
----
-
-## 🔒 개인정보 & COPPA 준수
-
-- 모든 데이터는 **기기 내 IndexedDB만** 사용
-- 서버 전송 없음, 계정 없음, 광고 없음
-- 한국 정보통신망법 + 미국 COPPA 자동 충족
-- 13세 미만 어린이 안전 카테고리로 출시 가능
-
----
-
-## 💰 수익화 모델
-
-- ✅ 식물/정원 스킨 IAP ($1.99)
-- ✅ 가족 프리미엄 구독 ($3.99/월) - 리포트, 무제한, AI 코치
-- ✅ B2B 학교 라이선스 (장기)
-- ❌ 광고, 가챠, 다크패턴 일체 없음
-
----
-
-## 🐛 문제 해결
-
-**npm install 에러:**
-- Node.js 18+ 확인 (`node -v`)
-- `npm cache clean --force` 후 재시도
-
-**식물이 안 보임:**
-- 브라우저 콘솔에서 IndexedDB 확인
-- DevTools → Application → IndexedDB → mind-garden-db
-
-**처음부터 다시 시작하려면:**
-- 브라우저 DevTools → Application → Clear storage → Clear site data
-
----
-
-## 📜 라이선스
-
-MIT
+🌿 *작은 마음 하나하나가 왕국을 구하는 빛이 됩니다.*

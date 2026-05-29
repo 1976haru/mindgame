@@ -10,19 +10,37 @@ import { IntensitySelectScreen } from './components/screens/IntensitySelectScree
 import { PlantGrowingScreen } from './components/screens/PlantGrowingScreen'
 import { FriendVisitScreen } from './components/screens/FriendVisitScreen'
 import { BreathingScreen } from './components/minigames/BreathingScreen'
+import { MinigamesScreen } from './components/screens/MinigamesScreen'
+import { WorryBubbleScreen } from './components/minigames/WorryBubbleScreen'
+import { GratitudeStarScreen } from './components/minigames/GratitudeStarScreen'
+import { ColorPaintScreen } from './components/minigames/ColorPaintScreen'
+import { SolomonIntroScreen } from './components/screens/SolomonIntroScreen'
+import { KingdomScreen } from './components/screens/KingdomScreen'
+import { CollectionScreen } from './components/screens/CollectionScreen'
+import { HeroCollectionScreen } from './components/screens/HeroCollectionScreen'
+import { SettingsScreen } from './components/screens/SettingsScreen'
+import { EpisodeListScreen } from './components/screens/EpisodeListScreen'
+import { CourtroomScreen } from './components/screens/CourtroomScreen'
+import { FusionScreen } from './components/screens/FusionScreen'
+import { TreasureChestScreen } from './components/screens/TreasureChestScreen'
+import { MyLawbookScreen } from './components/screens/MyLawbookScreen'
+import { ParentReportScreen } from './components/screens/ParentReportScreen'
+import { setSfxMuted } from './utils/sound'
 
 export default function App() {
   const currentScreen = useAppStore(s => s.currentScreen)
   const loaded = useAppStore(s => s.loaded)
   const initialize = useAppStore(s => s.initialize)
+  const muteSfx = useAppStore(s => s.game.muteSfx)
 
   useEffect(() => {
     if (!loaded) {
-      // SplashScreen에서 호출하지만 안전장치
       const t = setTimeout(() => initialize(), 2000)
       return () => clearTimeout(t)
     }
   }, [loaded, initialize])
+
+  useEffect(() => { setSfxMuted(muteSfx) }, [muteSfx])
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -35,7 +53,22 @@ export default function App() {
       case 'plantGrowing':    return <PlantGrowingScreen />
       case 'friendVisit':     return <FriendVisitScreen />
       case 'breathing':       return <BreathingScreen />
-      default:                return <SplashScreen />
+      case 'minigames':       return <MinigamesScreen />
+      case 'worryBubble':     return <WorryBubbleScreen />
+      case 'gratitudeStar':   return <GratitudeStarScreen />
+      case 'colorPaint':      return <ColorPaintScreen />
+      case 'solomonIntro':    return <SolomonIntroScreen />
+      case 'kingdom':         return <KingdomScreen />
+      case 'collection':      return <CollectionScreen />
+      case 'heroCollection':  return <HeroCollectionScreen />
+      case 'settings':        return <SettingsScreen />
+      case 'episodeList':     return <EpisodeListScreen />
+      case 'courtroom':       return <CourtroomScreen />
+      case 'fusion':          return <FusionScreen />
+      case 'treasureChest':   return <TreasureChestScreen />
+      case 'myLawbook':       return <MyLawbookScreen />
+      case 'parentReport':    return <ParentReportScreen />
+      default:                return <GardenScreen />
     }
   }
 
