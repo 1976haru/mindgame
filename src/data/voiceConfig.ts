@@ -48,7 +48,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   time_owl: {
     id: 'time_owl',
     name: '시간 부엉이',
-    voiceId: 'PLACEHOLDER_TIMEOWL', // ← 학자 같은 차분한 목소리
+    voiceId: 'IbfOLl326yGMqZomahGg', // ← 학자 같은 차분한 목소리
     description: '지적이고 차분한 학자 목소리',
     settings: { stability: 0.7, similarity_boost: 0.75, style: 0.3 },
   },
