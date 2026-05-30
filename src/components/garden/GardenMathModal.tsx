@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { MathProblem, CONCEPT_LABELS } from '../../data/mathGarden'
 import { playSound } from '../../utils/sound'
+import { playVoice } from '../../utils/voice'
+import { reactionClip } from '../../data/voiceExtra'
 
 interface Props {
   problem: MathProblem
@@ -38,6 +40,9 @@ export function GardenMathModal({ problem, onClose, reward = 2 }: Props) {
     setPicked(val)
     const ok = val === problem.answer
     recordMathResult(problem.concept, ok)
+    // 숫자 곰돌이가 정답/오답을 읽어줌 (작업 5)
+    const clip = reactionClip('number_bear', ok, problem.answer)
+    if (clip) void playVoice(clip)
     if (ok) {
       playSound('correct')
       awardEmpathy(reward)

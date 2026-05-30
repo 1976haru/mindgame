@@ -74,7 +74,7 @@ export function formatCooldown(ms: number): string {
 
 // === 식물과 대화 (감정별 따뜻한 대사) ===
 // 그날 심은 감정 + 성장 단계 기반. 아이의 감정 표현을 격려.
-const TALK_LINES: Record<EmotionType, string[]> = {
+export const TALK_LINES: Record<EmotionType, string[]> = {
   joy: ['오늘 기분 좋았구나! 나도 너 덕분에 쑥쑥 자라!', '네가 웃으면 내 꽃잎도 활짝 펴져.'],
   sad: ['슬펐구나... 나도 비 오는 날을 좋아해. 천천히 자랄게.', '괜찮아, 울어도 돼. 내가 곁에 있어줄게.'],
   angry: ['화가 났었구나. 후~ 하고 같이 숨을 쉬어볼까?', '속상했지? 잡초를 뽑으면 마음도 시원해져.'],
@@ -90,6 +90,12 @@ export function getPlantTalk(emotion: EmotionType, stage: GrowthStage): string {
   // 단계가 높을수록 뒤쪽(성숙한) 대사
   const idx = stage === 'seed' || stage === 'sprout' ? 0 : Math.min(lines.length - 1, 1)
   return lines[idx]
+}
+
+// 식물 대화 음성 clipId (getPlantTalk과 동일한 대사 선택). 음성: 위로 토끼.
+export function plantTalkClipId(emotion: EmotionType, stage: GrowthStage): string {
+  const idx = stage === 'seed' || stage === 'sprout' ? 0 : 1
+  return `plant_${emotion}_${idx + 1}`
 }
 
 // 아이가 식물에게 답하는 선택지 (감정 표현 연습)

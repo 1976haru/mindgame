@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { playVoice } from '../../utils/voice'
+import { heroQuoteClip } from '../../data/voiceExtra'
 import { getEpisodeById } from '../../data/episodes'
 import { getHeroById } from '../../data/heroes'
 import { BUILDING_BY_ID } from '../../data/buildings'
@@ -53,6 +54,8 @@ export function CourtroomScreen() {
     setReward(r)
     playSound('verdict')
     setStep('verdict')
+    // 새 영웅카드 획득 시 위인 한마디 (시간 부엉이) — 판결 효과음 뒤에
+    if (r.heroId) setTimeout(() => void playVoice(heroQuoteClip(r.heroId!)), 1400)
   }
 
   const hero = reward?.heroId ? getHeroById(reward.heroId) : undefined

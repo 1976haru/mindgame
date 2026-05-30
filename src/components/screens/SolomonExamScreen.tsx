@@ -38,7 +38,7 @@ export function SolomonExamScreen() {
     else setScreen('dojoDetail')
   }
 
-  const props = { config: examMission?.config ?? {}, color: dojo.color, onComplete: finish }
+  const props = { config: examMission?.config ?? {}, color: dojo.color, onComplete: finish, missionId: examMission?.id, mentorId: dojo.mentor.id }
   const renderEngine = () => {
     if (!examMission) { finish(true); return null }
     switch (examMission.missionType) {

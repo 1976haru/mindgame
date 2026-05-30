@@ -6,8 +6,10 @@ import { useAppStore } from '../../store/appStore'
 import { PlantWithGrowth } from '../plants/PlantWithGrowth'
 import { PLANT_BY_ID } from '../../data/plants'
 import {
-  CARE_LIST, CareType, careCooldownRemaining, formatCooldown, getPlantTalk, TALK_REPLIES, CARE_ACTIONS,
+  CARE_LIST, CareType, careCooldownRemaining, formatCooldown, getPlantTalk, TALK_REPLIES, CARE_ACTIONS, plantTalkClipId,
 } from '../../data/careActions'
+import { plantGrowClip } from '../../data/voiceExtra'
+import { playVoice } from '../../utils/voice'
 import {
   entryStage, calculateHealth, STAGE_BY_ID, HEALTH_STATES, nextStage, STAGE_REQUIREMENTS, entryCarePoints,
 } from '../../data/growth'
@@ -63,6 +65,7 @@ export function PlantCareSheet({ entryId, onClose }: Props) {
     }
     if (res.grew) {
       playSound('grow')
+      void playVoice(plantGrowClip(careNow)) // 위로 토끼 성장 축하 음성
       setMessage('식물이 한 단계 자랐어요! 🌱✨')
     } else {
       setMessage(CARE_ACTIONS[type].therapyMessage)
@@ -73,6 +76,7 @@ export function PlantCareSheet({ entryId, onClose }: Props) {
   const handleTalk = () => {
     setTalking(true)
     setMessage(getPlantTalk(entry.emotion, stage))
+    void playVoice(plantTalkClipId(entry.emotion, stage)) // 식물(위로 토끼) 음성
     void careForPlant(entryId, 'talk') // 대화도 돌봄(+1)
     setTick(t => t + 1)
   }

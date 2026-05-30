@@ -16,6 +16,11 @@ export interface VoiceScript {
   context?: string // 사용 위치 설명
 }
 
+// 미션 안내 음성은 미션 데이터에서 자동 생성 (작업 1) — scripts.ts 끝 합본에서 추가
+import { buildMissionGuideScripts } from './missionVoice'
+// 반응/식물대화/위인 음성 (작업 2~4)
+import { buildExtraVoiceScripts } from './voiceExtra'
+
 // ── A. 솔로몬 부엉이 ─────────────────────────────────────────────
 const SOLOMON: VoiceScript[] = [
   { id: 'solomon_intro_01', character: 'solomon', text: '안녕, 어린 친구. 나는 지혜의 부엉이 솔로몬이란다.', category: 'solomon', context: '첫 만남 컷신' },
@@ -233,6 +238,8 @@ export const VOICE_SCRIPTS: VoiceScript[] = [
   ...FRIENDS,
   ...buildDictationScripts(),
   ...MISSION,
+  ...buildMissionGuideScripts(), // 미션 안내 음성 (작업 1, 자동 생성)
+  ...buildExtraVoiceScripts(),   // 반응·식물대화·위인 (작업 2~4)
   ...UI,
 ]
 

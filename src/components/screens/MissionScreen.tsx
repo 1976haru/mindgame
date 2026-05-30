@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import { useAppStore } from '../../store/appStore'
 import { getMission } from '../../data/missions'
 import { DOJO_BY_ID } from '../../data/dojos'
+import { playVoice } from '../../utils/voice'
+import { missionIntroClip } from '../../data/missionVoice'
 import { MentorAvatar } from '../mentors/MentorComponents'
 import { EngineResult } from '../missions/engines/types'
 import { MultipleChoiceEngine } from '../missions/engines/MultipleChoiceEngine'
@@ -20,6 +23,12 @@ export function MissionScreen() {
   const setMissionOutcome = useAppStore(s => s.setMissionOutcome)
 
   const mission = activeMissionId ? getMission(activeMissionId) : undefined
+  // 활동형(문제 없음) 미션은 진입 시 멘토가 안내 음성을 읽어줌. 문제형은 각 엔진이 문제별 재생.
+  const isActivity = !!mission && !mission.config.questions?.length
+  useEffect(() => {
+    if (mission && isActivity) void playVoice(missionIntroClip(mission.id))
+  }, [mission?.id, isActivity])
+
   if (!mission) { setScreen('dojoHall'); return null }
   const dojo = DOJO_BY_ID[mission.dojoId]
 
@@ -34,7 +43,7 @@ export function MissionScreen() {
     setScreen('missionResult')
   }
 
-  const engineProps = { config: mission.config, color: dojo.color, onComplete: handle }
+  const engineProps = { config: mission.config, color: dojo.color, onComplete: handle, missionId: mission.id, mentorId: dojo.mentor.id }
 
   const renderEngine = () => {
     switch (mission.missionType) {
@@ -66,6 +75,10 @@ export function MissionScreen() {
             <div style={{ fontSize: 17, fontWeight: 700 }}>{mission.title}</div>
             <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{mission.passCondition}</div>
           </div>
+          {isActivity && (
+            <button onClick={() => void playVoice(missionIntroClip(mission.id))} aria-label="안내 다시 듣기"
+              style={{ marginLeft: 'auto', fontSize: 22, minHeight: 'auto', padding: 6, lineHeight: 1 }}>🔊</button>
+          )}
         </div>
       )}
       <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: fullscreen ? 0 : '12px 16px 24px' }}>
