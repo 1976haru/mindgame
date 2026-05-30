@@ -1,6 +1,7 @@
 import { openDB, IDBPDatabase } from 'idb'
 import { EmotionType } from '../data/emotions'
 import { DojoId, DojoRank } from '../data/dojos'
+import type { GrowthStage } from '../data/growth'
 
 export interface GardenEntry {
   id: string                // uuid
@@ -12,6 +13,16 @@ export interface GardenEntry {
   plantId: string           // 자라난 식물 종 ID
   position: { x: number; y: number }  // 정원 내 위치 (0~1)
   painted?: boolean         // 색칠 미니게임으로 만든 식물
+
+  // === v4.0 자라는 정원 (모두 optional → 과거 엔트리 자동 마이그레이션) ===
+  stage?: GrowthStage                 // 성장 단계 (없으면 '활짝'으로 간주)
+  carePoints?: number                 // 누적 돌봄 포인트
+  plantedAt?: number                  // 심은 시각 (ms)
+  lastWatered?: number                // 마지막 물 준 시각 (ms)
+  heightCm?: number                   // 식물 키 (cm, 측정 수학용)
+  growthLog?: { stage: GrowthStage; at: number }[]  // 단계 전환 기록
+  nickname?: string                   // 아이가 지어준 식물 별명 (애착)
+  lastCareAt?: Record<string, number> // 돌봄 종류별 마지막 사용 시각 (쿨다운)
 }
 
 export interface UserProfile {
@@ -76,6 +87,40 @@ export interface GameState {
   dailyChallengeDate: string        // 마지막으로 도전 생성/완료한 날짜
   dailyClaimedDate: string          // 보상 받은 날짜
   dailyStreak: number               // 연속 일일도전 일수
+
+  // === v4.0 자라는 정원 (Phase 2 돌보기) ===
+  careCount: number                 // 총 돌봄 횟수
+  waterCount: number                // 물주기 횟수
+  weedCount: number                 // 잡초 뽑기 횟수 (무당벌레 등장 조건)
+  talkCount: number                 // 식물과 대화 횟수
+  ownedTools: string[]              // 보유한 정원 도구 id
+
+  // === v4.0 숨겨진 수학 (Phase 3) ===
+  mathStats: Record<string, { correct: number; attempts: number }>  // 개념별 통계 (부모 리포트)
+  mathTotalCorrect: number          // 누적 정답 수
+
+  // === v4.0 정원 레벨 + 꾸미기 (Phase 4) ===
+  gardenXp: number                  // 정원 경험치
+  gardenLevelSeen: number           // 마지막으로 컷신을 본 정원 레벨
+  ownedDecorations: string[]        // 구매한 장식 id (중복 구매 가능하도록 카운트는 placed로)
+  placedDecorations: PlacedDecoration[]  // 정원에 배치된 장식
+  gardenTheme: string               // 적용 중인 테마 id
+
+  // === v4.0 살아있는 생태계 (Phase 5) ===
+  seeds: number                     // 수확으로 모은 씨앗 (다시 심기/순환)
+  harvestCount: number              // 누적 수확 횟수
+  seenCreatures: string[]           // 처음 만난 생물 id (도감/기록)
+  lastWeatherWaterDate: string      // 비 날씨 자동 물주기를 적용한 날짜
+
+  // === v4.0 통합/폴리싱 (Phase 6) ===
+  gardenTutorialSeen: boolean       // 자라는 정원 튜토리얼 완료 여부
+}
+
+export interface PlacedDecoration {
+  uid: string                       // 배치 인스턴스 고유 id
+  decoId: string                    // DECORATIONS의 id
+  x: number                         // 0~1
+  y: number                         // 0~1
 }
 
 export interface DojoProgressEntry {
@@ -143,7 +188,24 @@ export function defaultGameState(): GameState {
     unlockedSynergies: [],
     dailyChallengeDate: '',
     dailyClaimedDate: '',
-    dailyStreak: 0
+    dailyStreak: 0,
+    careCount: 0,
+    waterCount: 0,
+    weedCount: 0,
+    talkCount: 0,
+    ownedTools: [],
+    mathStats: {},
+    mathTotalCorrect: 0,
+    gardenXp: 0,
+    gardenLevelSeen: 1,
+    ownedDecorations: [],
+    placedDecorations: [],
+    gardenTheme: 'default',
+    seeds: 0,
+    harvestCount: 0,
+    seenCreatures: [],
+    lastWeatherWaterDate: '',
+    gardenTutorialSeen: false
   }
 }
 

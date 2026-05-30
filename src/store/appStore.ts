@@ -25,6 +25,12 @@ import { getTodaysChallenge, DAILY_REWARD } from '../data/dailyChallenge'
 import { computeUnlockedSynergies } from '../data/synergies'
 import { daysBetween } from '../utils/timeUtils'
 import { todayString, uuid, randomGardenPosition } from '../utils/helpers'
+import { growToCurrent, entryStage, stageOrder, STAGE_REQUIREMENTS } from '../data/growth'
+import { CARE_ACTIONS, CareType, canCare } from '../data/careActions'
+import { levelForXp, XP_REWARDS } from '../data/gardenLevels'
+import { DECO_BY_ID, THEME_BY_ID } from '../data/decorations'
+import { getTodayWeather, WEATHER_INFO } from '../utils/weather'
+import { PlacedDecoration } from '../utils/storage'
 
 export type Screen =
   | 'splash' | 'nameInput' | 'gardenAwaken' | 'garden'
@@ -37,6 +43,7 @@ export type Screen =
   | 'dojoHall' | 'dojoDetail' | 'mission' | 'missionResult'
   | 'solomonExam' | 'shihanCutscene' | 'hallOfFame'
   | 'dailyChallenge' | 'versus' | 'certificate'
+  | 'gardenShop' | 'gardenDiary'
 
 interface AppState {
   // 데이터
@@ -56,6 +63,7 @@ interface AppState {
   activeMissionId: string | null
   missionOutcome: { dojoId: DojoId; missionId: string; success: boolean; rankedUp: DojoRank | null; shihanReady: boolean } | null
   certGrand: boolean   // true=명예의 전당 인증서, false=도장 사범 인증서(activeDojoId)
+  pendingGardenLevelUp: number | null   // 정원 레벨업 컷신 대기 (transient)
 
   // 파생값 (편의)
   unlockedHeroes: string[]
@@ -67,6 +75,22 @@ interface AppState {
   markGardenAwakened: () => Promise<void>
   setPendingEmotion: (type: EmotionType, intensity: number) => void
   addEntry: (entry: GardenEntry) => Promise<void>
+  refreshGrowth: () => Promise<void>
+  careForPlant: (entryId: string, type: CareType) => Promise<{ ok: boolean; grew: boolean; reason?: 'cooldown' | 'energy' }>
+  setPlantNickname: (entryId: string, nickname: string) => Promise<void>
+  recordMathResult: (concept: string, correct: boolean) => void
+  harvestPlant: (entryId: string) => Promise<{ ok: boolean; empathy: number }>
+  applyDailyWeather: () => Promise<void>
+
+  // 정원 레벨 + 꾸미기 (Phase 4)
+  ackGardenLevelUp: () => void
+  buyDecoration: (decoId: string) => boolean
+  placeDecoration: (decoId: string, x: number, y: number) => void
+  moveDecoration: (uid: string, x: number, y: number) => void
+  removeDecoration: (uid: string) => void
+  buyTheme: (themeId: string) => boolean
+  setGardenTheme: (themeId: string) => void
+  markGardenTutorialSeen: () => void
 
   // 게임
   persistGame: () => Promise<void>
@@ -105,6 +129,15 @@ interface AppState {
   completeShihan: (dojoId: DojoId) => Promise<{ heroId: string; titleName: string }>
 
   resetAll: () => Promise<void>
+}
+
+// 정원 XP 적립 (+ 레벨업 감지). gardenLevelSeen은 컷신 확인 시 갱신.
+function withXp(g: GameState, amount: number): { game: GameState; leveledTo: number | null } {
+  if (amount <= 0) return { game: g, leveledTo: null }
+  const gardenXp = g.gardenXp + amount
+  const newLevel = levelForXp(gardenXp)
+  const leveledTo = newLevel > g.gardenLevelSeen ? newLevel : null
+  return { game: { ...g, gardenXp }, leveledTo }
 }
 
 // 출석/연속 기록 갱신 (오늘 첫 방문 시)
@@ -166,6 +199,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeMissionId: null,
   missionOutcome: null,
   certGrand: false,
+  pendingGardenLevelUp: null,
   unlockedHeroes: [],
 
   initialize: async () => {
@@ -182,6 +216,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       loaded: true,
       currentScreen: profile ? 'garden' : 'nameInput'
     })
+    // 자라는 정원: 비 날씨 자동 물주기 → 경과 시간만큼 식물 성장 반영
+    void get().applyDailyWeather().then(() => get().refreshGrowth())
   },
 
   setScreen: (screen) => set({ currentScreen: screen }),
@@ -208,14 +244,238 @@ export const useAppStore = create<AppState>((set, get) => ({
     // 레전더리 신규 해제 검사
     const should = computeUnlockedLegendaries(g0)
     const fresh = should.filter(id => !g0.unlockedLegendaries.includes(id))
-    const game = { ...g0, unlockedLegendaries: [...g0.unlockedLegendaries, ...fresh] }
+    const g1 = { ...g0, unlockedLegendaries: [...g0.unlockedLegendaries, ...fresh] }
+    // 정원 XP: 마음 심기
+    const { game, leveledTo } = withXp(g1, XP_REWARDS.plantEmotion)
     await saveGameState(game)
     set(state => ({
       entries: [...state.entries, entry],
       lastEntry: entry,
       game,
-      newlyUnlocked: fresh
+      newlyUnlocked: fresh,
+      pendingGardenLevelUp: leveledTo ?? state.pendingGardenLevelUp
     }))
+  },
+
+  // 경과 시간만큼 식물을 자라게 함 (앱 진입/복귀 시). 식물은 죽지 않으므로 성장만 처리.
+  refreshGrowth: async () => {
+    const now = Date.now()
+    const { entries } = get()
+    let changed = false
+    let stagesGrown = 0
+    const updated = await Promise.all(entries.map(async (e) => {
+      const grown = growToCurrent(e, now)
+      if (grown !== e) {
+        changed = true
+        stagesGrown += stageOrder(entryStage(grown)) - stageOrder(entryStage(e))
+        await saveEntry(grown)
+      }
+      return grown
+    }))
+    if (changed) {
+      const { game, leveledTo } = withXp(get().game, stagesGrown * XP_REWARDS.growthStage)
+      await saveGameState(game)
+      set(state => ({ entries: updated, game, pendingGardenLevelUp: leveledTo ?? state.pendingGardenLevelUp }))
+    }
+  },
+
+  // 식물 한 그루 돌보기. 쿨다운/에너지 확인 → 돌봄 포인트 적립 → 즉시 성장 반영.
+  careForPlant: async (entryId, type) => {
+    const now = Date.now()
+    const { entries, game } = get()
+    const entry = entries.find(e => e.id === entryId)
+    if (!entry) return { ok: false, grew: false }
+    if (!canCare(entry, type, now)) return { ok: false, grew: false, reason: 'cooldown' }
+
+    const action = CARE_ACTIONS[type]
+    if (action.empathyCost > 0 && game.empathyEnergy < action.empathyCost) {
+      return { ok: false, grew: false, reason: 'energy' }
+    }
+
+    const beforeOrder = stageOrder(entryStage(entry))
+    let updated: GardenEntry = {
+      ...entry,
+      carePoints: (entry.carePoints ?? 0) + action.carePoints,
+      lastCareAt: { ...(entry.lastCareAt ?? {}), [type]: now },
+    }
+    // 물주기는 건강 회복 (시든 식물도 즉시 생기 회복)
+    if (type === 'water') updated.lastWatered = now
+    // 누적 시간/돌봄 조건 충족 시 성장
+    updated = growToCurrent(updated, now)
+    const stagesGrown = stageOrder(entryStage(updated)) - beforeOrder
+    const grew = stagesGrown > 0
+    await saveEntry(updated)
+
+    // 게임 카운터 + 에너지 + 정원 XP(돌봄 + 성장)
+    const baseGame: GameState = {
+      ...game,
+      empathyEnergy: game.empathyEnergy - action.empathyCost,
+      careCount: game.careCount + 1,
+      waterCount: game.waterCount + (type === 'water' ? 1 : 0),
+      weedCount: game.weedCount + (type === 'weed' ? 1 : 0),
+      talkCount: game.talkCount + (type === 'talk' ? 1 : 0),
+    }
+    const xp = XP_REWARDS.care + stagesGrown * XP_REWARDS.growthStage
+    const { game: nextGame, leveledTo } = withXp(baseGame, xp)
+    await saveGameState(nextGame)
+    set(state => ({
+      entries: entries.map(e => (e.id === entryId ? updated : e)),
+      game: nextGame,
+      pendingGardenLevelUp: leveledTo ?? state.pendingGardenLevelUp,
+    }))
+    return { ok: true, grew }
+  },
+
+  setPlantNickname: async (entryId, nickname) => {
+    const { entries } = get()
+    const entry = entries.find(e => e.id === entryId)
+    if (!entry) return
+    const updated = { ...entry, nickname: nickname.trim() || undefined }
+    await saveEntry(updated)
+    set({ entries: entries.map(e => (e.id === entryId ? updated : e)) })
+  },
+
+  // 정원 수학 결과 기록 (보너스 · 부모 리포트 통계). 정답 시 격려 보상은 호출부에서 awardEmpathy.
+  recordMathResult: (concept, correct) => {
+    const { game } = get()
+    const prev = game.mathStats[concept] ?? { correct: 0, attempts: 0 }
+    const base: GameState = {
+      ...game,
+      mathStats: { ...game.mathStats, [concept]: { correct: prev.correct + (correct ? 1 : 0), attempts: prev.attempts + 1 } },
+      mathTotalCorrect: game.mathTotalCorrect + (correct ? 1 : 0),
+    }
+    const { game: next, leveledTo } = withXp(base, correct ? XP_REWARDS.mathCorrect : 0)
+    set(state => ({ game: next, pendingGardenLevelUp: leveledTo ?? state.pendingGardenLevelUp }))
+    void saveGameState(next)
+  },
+
+  // 열매 수확 → 공감 에너지 + 씨앗. 식물은 사라지지 않고 '활짝'으로 돌아가 다시 열매 맺음(순환).
+  harvestPlant: async (entryId) => {
+    const { entries, game } = get()
+    const entry = entries.find(e => e.id === entryId)
+    if (!entry || entryStage(entry) !== 'fruit') return { ok: false, empathy: 0 }
+    const reward = 5
+    const updated: GardenEntry = {
+      ...entry,
+      stage: 'bloom',
+      carePoints: STAGE_REQUIREMENTS.bloom.care, // 다음 열매까지 다시 돌봄 필요
+      growthLog: [...(entry.growthLog ?? []), { stage: 'bloom', at: Date.now() }],
+    }
+    await saveEntry(updated)
+    const next: GameState = {
+      ...game,
+      empathyEnergy: game.empathyEnergy + reward,
+      totalEmpathyEarned: game.totalEmpathyEarned + reward,
+      seeds: game.seeds + 1,
+      harvestCount: game.harvestCount + 1,
+    }
+    await saveGameState(next)
+    set({ entries: entries.map(e => (e.id === entryId ? updated : e)), game: next })
+    return { ok: true, empathy: reward }
+  },
+
+  // 비 오는 날: 하루 한 번 모든 식물 자동 물주기 (건강 회복, 죄책감 없는 정원)
+  applyDailyWeather: async () => {
+    const weather = getTodayWeather()
+    if (!WEATHER_INFO[weather].autoWater) return
+    const today = todayString()
+    const { entries, game } = get()
+    if (game.lastWeatherWaterDate === today) return
+    const now = Date.now()
+    const updated = await Promise.all(entries.map(async (e) => {
+      const watered = { ...e, lastWatered: now }
+      await saveEntry(watered)
+      return watered
+    }))
+    const next = { ...game, lastWeatherWaterDate: today }
+    await saveGameState(next)
+    set({ entries: updated, game: next })
+  },
+
+  // 레벨업 컷신 확인 → 본 레벨 기록 + 대기 해제
+  ackGardenLevelUp: () => {
+    const { game, pendingGardenLevelUp } = get()
+    if (pendingGardenLevelUp == null) return
+    const next = { ...game, gardenLevelSeen: Math.max(game.gardenLevelSeen, pendingGardenLevelUp) }
+    set({ game: next, pendingGardenLevelUp: null })
+    void saveGameState(next)
+  },
+
+  buyDecoration: (decoId) => {
+    const { game } = get()
+    const deco = DECO_BY_ID[decoId]
+    if (!deco || game.empathyEnergy < deco.cost) return false
+    const next = { ...game, empathyEnergy: game.empathyEnergy - deco.cost, ownedDecorations: [...game.ownedDecorations, decoId] }
+    set({ game: next })
+    void saveGameState(next)
+    return true
+  },
+
+  // 구매한 장식을 정원에 배치 (인벤토리에서 하나 소비)
+  placeDecoration: (decoId, x, y) => {
+    const { game } = get()
+    const idx = game.ownedDecorations.indexOf(decoId)
+    if (idx < 0) return
+    const owned = [...game.ownedDecorations]
+    owned.splice(idx, 1)
+    const placed: PlacedDecoration = { uid: uuid(), decoId, x, y }
+    const next = { ...game, ownedDecorations: owned, placedDecorations: [...game.placedDecorations, placed] }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  moveDecoration: (uid, x, y) => {
+    const { game } = get()
+    const next = { ...game, placedDecorations: game.placedDecorations.map(p => (p.uid === uid ? { ...p, x, y } : p)) }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  // 배치 해제 → 인벤토리로 회수
+  removeDecoration: (uid) => {
+    const { game } = get()
+    const p = game.placedDecorations.find(d => d.uid === uid)
+    if (!p) return
+    const next = {
+      ...game,
+      placedDecorations: game.placedDecorations.filter(d => d.uid !== uid),
+      ownedDecorations: [...game.ownedDecorations, p.decoId],
+    }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  buyTheme: (themeId) => {
+    const { game } = get()
+    const theme = THEME_BY_ID[themeId]
+    if (!theme) return false
+    if (game.ownedTools.includes(`theme:${themeId}`) || theme.cost === 0) {
+      const next = { ...game, gardenTheme: themeId }
+      set({ game: next }); void saveGameState(next); return true
+    }
+    if (game.empathyEnergy < theme.cost) return false
+    const next = { ...game, empathyEnergy: game.empathyEnergy - theme.cost, ownedTools: [...game.ownedTools, `theme:${themeId}`], gardenTheme: themeId }
+    set({ game: next })
+    void saveGameState(next)
+    return true
+  },
+
+  setGardenTheme: (themeId) => {
+    const { game } = get()
+    const theme = THEME_BY_ID[themeId]
+    if (!theme) return
+    if (theme.cost > 0 && !game.ownedTools.includes(`theme:${themeId}`)) return
+    const next = { ...game, gardenTheme: themeId }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  markGardenTutorialSeen: () => {
+    const { game } = get()
+    if (game.gardenTutorialSeen) return
+    const next = { ...game, gardenTutorialSeen: true }
+    set({ game: next })
+    void saveGameState(next)
   },
 
   persistGame: async () => { await saveGameState(get().game) },

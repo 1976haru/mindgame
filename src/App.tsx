@@ -34,6 +34,8 @@ import { VersusScreen } from './components/screens/VersusScreen'
 import { SolomonExamScreen } from './components/screens/SolomonExamScreen'
 import { ShihanCutsceneScreen } from './components/screens/ShihanCutsceneScreen'
 import { HallOfFameScreen } from './components/screens/HallOfFameScreen'
+import { GardenShopScreen } from './components/screens/GardenShopScreen'
+import { GardenDiaryScreen } from './components/screens/GardenDiaryScreen'
 import { Subtitle } from './components/common/Subtitle'
 import * as Tone from 'tone'
 import { setSfxMuted, setSoundVolume } from './utils/sound'
@@ -134,6 +136,8 @@ export default function App() {
       case 'solomonExam':     return <SolomonExamScreen />
       case 'shihanCutscene':  return <ShihanCutsceneScreen />
       case 'hallOfFame':      return <HallOfFameScreen />
+      case 'gardenShop':      return <GardenShopScreen />
+      case 'gardenDiary':     return <GardenDiaryScreen />
       case 'certificate':     return <CertificateScreen />
       default:                return <GardenScreen />
     }

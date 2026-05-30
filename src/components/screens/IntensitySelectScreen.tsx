@@ -22,14 +22,22 @@ export function IntensitySelectScreen() {
 
   const handleConfirm = async () => {
     const plant = getPlantForEmotion(pendingEmotion.type, intensity, unlockedLegendaries)
+    const now = Date.now()
     const entry = {
       id: uuid(),
       date: todayString(),
-      timestamp: Date.now(),
+      timestamp: now,
       emotion: pendingEmotion.type,
       intensity,
       plantId: plant.id,
-      position: randomGardenPosition()
+      position: randomGardenPosition(),
+      // 자라는 정원: 씨앗부터 시작
+      stage: 'seed' as const,
+      carePoints: 0,
+      plantedAt: now,
+      lastWatered: now,
+      heightCm: 1,
+      growthLog: [{ stage: 'seed' as const, at: now }]
     }
     setPendingEmotion(pendingEmotion.type, intensity)
     await addEntry(entry)

@@ -4,6 +4,7 @@ import { useAppStore } from '../../store/appStore'
 import { EMOTIONS, EmotionType, EMOTION_LIST } from '../../data/emotions'
 import { EPISODE_BY_ID } from '../../data/episodes'
 import { getHeroById } from '../../data/heroes'
+import { CONCEPT_LABELS, MathConcept } from '../../data/mathGarden'
 
 export function ParentReportScreen() {
   const game = useAppStore(s => s.game)
@@ -129,6 +130,44 @@ export function ParentReportScreen() {
             {game.unlockedHeroes.length === 0 && <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>아직 없어요.</p>}
           </div>
         </div>
+
+        {/* 숨겨진 수학 연습 (아이는 모르게, 부모는 학습 효과 확인) */}
+        {(() => {
+          const stats = game.mathStats
+          const keys = Object.keys(stats) as MathConcept[]
+          const totalAttempts = keys.reduce((s, k) => s + stats[k].attempts, 0)
+          if (totalAttempts === 0) return null
+          // 가장 자주 틀리는 개념 (보완 가이드)
+          const weakest = [...keys]
+            .filter(k => stats[k].attempts >= 2)
+            .sort((a, b) => (stats[a].correct / stats[a].attempts) - (stats[b].correct / stats[b].attempts))[0]
+          return (
+            <div style={card}>
+              <div style={cardTitle}>🧮 정원 속 수학 연습 (누적 정답 {game.mathTotalCorrect}회)</div>
+              <p style={{ fontSize: 15, color: 'var(--color-text-soft)', marginBottom: 10 }}>
+                {profile?.name}님은 정원을 가꾸며 수 개념을 {totalAttempts}번 연습했어요.
+              </p>
+              {keys.map(k => {
+                const s = stats[k]
+                const pct = Math.round((s.correct / s.attempts) * 100)
+                return (
+                  <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <span style={{ width: 72, fontSize: 15 }}>{CONCEPT_LABELS[k]}</span>
+                    <div style={{ flex: 1, height: 12, borderRadius: 8, background: 'rgba(255,255,255,0.08)' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 8, background: 'linear-gradient(90deg,#5eebb7,#7c5cff)' }} />
+                    </div>
+                    <span style={{ width: 56, fontSize: 14, color: 'var(--color-text-soft)', textAlign: 'right' }}>{s.correct}/{s.attempts}</span>
+                  </div>
+                )
+              })}
+              {weakest && (
+                <p style={{ fontSize: 14, color: 'var(--color-text-soft)', marginTop: 8 }}>
+                  💡 요즘 <b style={{ color: 'var(--color-accent)' }}>{CONCEPT_LABELS[weakest]}</b>을(를) 조금 어려워해요. 함께 천천히 연습해보면 좋아요.
+                </p>
+              )}
+            </div>
+          )
+        })()}
 
         {/* 인사이트 */}
         <div style={{ ...card, background: 'linear-gradient(135deg, rgba(124,92,255,0.2), rgba(255,158,199,0.15))' }}>
