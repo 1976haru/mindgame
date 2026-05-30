@@ -77,7 +77,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   comfort_rabbit: {
     id: 'comfort_rabbit',
     name: '위로 토끼',
-    voiceId: 'PLACEHOLDER_COMFORT', // ← 부드러운 위로의 목소리
+    voiceId: '3aaymQ31VKu321LnuMFL', // ← 부드러운 위로의 목소리
     description: '따뜻하고 부드럽게 위로하는 목소리',
     settings: { stability: 0.8, similarity_boost: 0.8, style: 0.3 },
   },
