@@ -19,6 +19,10 @@ import {
 } from '../utils/storage'
 import { PLANT_SPECIES } from '../data/plants'
 import { computeUnlockedLegendaries } from '../utils/gameLogic'
+import { DojoId, DojoRank, DOJO_BY_ID, nextRank } from '../data/dojos'
+import { getMissionsByRank } from '../data/missions'
+import { getTodaysChallenge, DAILY_REWARD } from '../data/dailyChallenge'
+import { computeUnlockedSynergies } from '../data/synergies'
 import { daysBetween } from '../utils/timeUtils'
 import { todayString, uuid, randomGardenPosition } from '../utils/helpers'
 
@@ -30,6 +34,9 @@ export type Screen =
   | 'collection' | 'heroCollection' | 'plantCollection'
   | 'fusion' | 'treasureChest' | 'myLawbook'
   | 'settings' | 'parentReport'
+  | 'dojoHall' | 'dojoDetail' | 'mission' | 'missionResult'
+  | 'solomonExam' | 'shihanCutscene' | 'hallOfFame'
+  | 'dailyChallenge' | 'versus' | 'certificate'
 
 interface AppState {
   // 데이터
@@ -45,6 +52,10 @@ interface AppState {
   activeEpisodeId: string | null
   activeDomain: string | null
   newlyUnlocked: string[]        // 직전 행동으로 새로 해제된 레전더리 식물 id
+  activeDojoId: DojoId | null
+  activeMissionId: string | null
+  missionOutcome: { dojoId: DojoId; missionId: string; success: boolean; rankedUp: DojoRank | null; shihanReady: boolean } | null
+  certGrand: boolean   // true=명예의 전당 인증서, false=도장 사범 인증서(activeDojoId)
 
   // 파생값 (편의)
   unlockedHeroes: string[]
@@ -75,9 +86,24 @@ interface AppState {
   setLawbookVow: (episodeId: string, vow: string) => void
   setBirthday: (mmdd: string) => void
   setParentPin: (pin: string) => void
-  toggleMute: (kind: 'sfx' | 'bgm') => void
+  toggleMute: (kind: 'sfx' | 'bgm' | 'voice') => void
+  toggleSubtitle: () => void
+  setMasterVolume: (v: number) => void
   setActiveEpisode: (id: string | null, domain?: string | null) => void
   fusePlants: (plantId: string) => Promise<string | null>  // 결과 epic 식물 id 반환
+  setStudentGrade: (grade: number) => void
+  exportData: () => string
+  importData: (json: string) => Promise<boolean>
+
+  // 도장 (v3.0)
+  setActiveDojo: (dojoId: DojoId | null) => void
+  setActiveMission: (missionId: string | null) => void
+  setMissionOutcome: (o: AppState['missionOutcome']) => void
+  setCertGrand: (v: boolean) => void
+  completeMission: (dojoId: DojoId, missionId: string) => Promise<{ rankedUp: DojoRank | null; shihanReady: boolean }>
+  recordMissionAttempt: (dojoId: DojoId, success: boolean) => void
+  completeShihan: (dojoId: DojoId) => Promise<{ heroId: string; titleName: string }>
+
   resetAll: () => Promise<void>
 }
 
@@ -136,6 +162,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeEpisodeId: null,
   activeDomain: null,
   newlyUnlocked: [],
+  activeDojoId: null,
+  activeMissionId: null,
+  missionOutcome: null,
+  certGrand: false,
   unlockedHeroes: [],
 
   initialize: async () => {
@@ -343,7 +373,24 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   toggleMute: (kind) => {
     const { game } = get()
-    const next = kind === 'sfx' ? { ...game, muteSfx: !game.muteSfx } : { ...game, muteBgm: !game.muteBgm }
+    const next =
+      kind === 'sfx' ? { ...game, muteSfx: !game.muteSfx }
+      : kind === 'bgm' ? { ...game, muteBgm: !game.muteBgm }
+      : { ...game, muteVoice: !game.muteVoice }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  toggleSubtitle: () => {
+    const { game } = get()
+    const next = { ...game, showSubtitle: !game.showSubtitle }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  setMasterVolume: (v) => {
+    const { game } = get()
+    const next = { ...game, masterVolume: Math.max(0, Math.min(1, v)) }
     set({ game: next })
     void saveGameState(next)
   },
@@ -374,6 +421,124 @@ export const useAppStore = create<AppState>((set, get) => ({
     return evolved.id
   },
 
+  setActiveDojo: (dojoId) => set({ activeDojoId: dojoId }),
+  setActiveMission: (missionId) => set({ activeMissionId: missionId }),
+  setMissionOutcome: (o) => set({ missionOutcome: o }),
+  setCertGrand: (v) => set({ certGrand: v }),
+
+  recordMissionAttempt: (dojoId, success) => {
+    const { game } = get()
+    const p = game.dojoProgress[dojoId]
+    const next = {
+      ...game,
+      dojoProgress: {
+        ...game.dojoProgress,
+        [dojoId]: { ...p, totalAttempts: p.totalAttempts + 1, totalSuccesses: p.totalSuccesses + (success ? 1 : 0) }
+      }
+    }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  completeMission: async (dojoId, missionId) => {
+    const { game } = get()
+    const p = game.dojoProgress[dojoId]
+    const completed = p.completedMissions.includes(missionId) ? p.completedMissions : [...p.completedMissions, missionId]
+
+    // 현재 급수의 모든 미션을 마쳤는지 → 승급
+    let currentRank = p.currentRank
+    const achieved = [...p.achievedRanks]
+    let rankedUp: DojoRank | null = null
+    // 미션이 존재하는 급수에 대해서만 승급 처리
+    let guard = 0
+    while (currentRank !== 0 && guard < 12) {
+      guard++
+      const rankMissions = getMissionsByRank(dojoId, currentRank)
+      if (rankMissions.length === 0) break
+      const allDone = rankMissions.every(m => completed.includes(m.id))
+      if (!allDone) break
+      if (!achieved.includes(currentRank)) achieved.push(currentRank)
+      rankedUp = currentRank
+      currentRank = nextRank(currentRank)  // 1급 다음은 0(사범 대기)
+    }
+
+    const mission = getMissionsByRank(dojoId, p.currentRank).find(m => m.id === missionId)
+    const empathyGain = mission?.rewards.empathy ?? 3
+
+    const next: GameState = {
+      ...game,
+      empathyEnergy: game.empathyEnergy + empathyGain,
+      totalEmpathyEarned: game.totalEmpathyEarned + empathyGain,
+      dojoProgress: {
+        ...game.dojoProgress,
+        [dojoId]: { ...p, completedMissions: completed, currentRank, achievedRanks: achieved, totalAttempts: p.totalAttempts + 1, totalSuccesses: p.totalSuccesses + 1 }
+      }
+    }
+
+    // 일일 도전 보상
+    const today = todayString()
+    if (missionId === getTodaysChallenge().id && next.dailyClaimedDate !== today) {
+      const prev = next.dailyClaimedDate
+      next.empathyEnergy += DAILY_REWARD
+      next.totalEmpathyEarned += DAILY_REWARD
+      next.dailyStreak = prev && daysBetween(prev, today) === 1 ? next.dailyStreak + 1 : 1
+      next.dailyClaimedDate = today
+      next.dailyChallengeDate = today
+    }
+    // 시너지 갱신
+    next.unlockedSynergies = computeUnlockedSynergies(next)
+
+    await saveGameState(next)
+    set({ game: next })
+    return { rankedUp, shihanReady: currentRank === 0 && !p.isShihan }
+  },
+
+  completeShihan: async (dojoId) => {
+    const { game } = get()
+    const dojo = DOJO_BY_ID[dojoId]
+    const p = game.dojoProgress[dojoId]
+    const achieved = p.achievedRanks.includes(0) ? p.achievedRanks : [...p.achievedRanks, 0]
+    const titles = game.dojoTitles.includes(dojo.finalReward.titleName) ? game.dojoTitles : [...game.dojoTitles, dojo.finalReward.titleName]
+    const heroes = game.unlockedHeroes.includes(dojo.finalReward.heroId) ? game.unlockedHeroes : [...game.unlockedHeroes, dojo.finalReward.heroId]
+    const reward = 30
+    const next: GameState = {
+      ...game,
+      empathyEnergy: game.empathyEnergy + reward,
+      totalEmpathyEarned: game.totalEmpathyEarned + reward,
+      unlockedHeroes: heroes,
+      dojoTitles: titles,
+      dojoProgress: { ...game.dojoProgress, [dojoId]: { ...p, isShihan: true, achievedRanks: achieved } }
+    }
+    next.unlockedSynergies = computeUnlockedSynergies(next)
+    await saveGameState(next)
+    set({ game: next, unlockedHeroes: heroes })
+    return { heroId: dojo.finalReward.heroId, titleName: dojo.finalReward.titleName }
+  },
+
+  setStudentGrade: (grade) => {
+    const { game } = get()
+    const next = { ...game, studentGrade: grade }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  exportData: () => {
+    const { profile, entries, game } = get()
+    return JSON.stringify({ version: 3, profile, entries, game })
+  },
+
+  importData: async (json) => {
+    try {
+      const data = JSON.parse(json) as { profile?: UserProfile; entries?: GardenEntry[]; game?: GameState }
+      if (data.profile) await saveProfile(data.profile)
+      if (data.entries) for (const e of data.entries) await saveEntry(e)
+      if (data.game) await saveGameState(data.game)
+      return true
+    } catch {
+      return false
+    }
+  },
+
   resetAll: async () => {
     await clearAllData()
     set({
@@ -384,6 +549,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       lastEntry: null,
       pendingEmotion: null,
       activeEpisodeId: null,
+      activeDojoId: null,
+      activeMissionId: null,
       newlyUnlocked: [],
       currentScreen: 'nameInput'
     })

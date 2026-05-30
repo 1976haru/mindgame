@@ -1,4 +1,4 @@
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 
 export type SoundName = 'pop' | 'grow' | 'correct' | 'wrong' | 'verdict' | 'treasure' | 'sparkle' | 'fusion'
 
@@ -19,6 +19,15 @@ let muted = false
 
 export function setSfxMuted(value: boolean) {
   muted = value
+}
+
+// 전체 효과음 음량 (0~1). 마스터 음량 슬라이더와 연동.
+export function setSoundVolume(volume: number) {
+  try {
+    Howler.volume(Math.max(0, Math.min(1, volume)))
+  } catch {
+    /* 무시 */
+  }
 }
 
 export function playSound(name: SoundName) {

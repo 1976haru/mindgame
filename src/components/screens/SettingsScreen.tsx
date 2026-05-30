@@ -7,14 +7,39 @@ export function SettingsScreen() {
   const game = useAppStore(s => s.game)
   const profile = useAppStore(s => s.profile)
   const toggleMute = useAppStore(s => s.toggleMute)
+  const toggleSubtitle = useAppStore(s => s.toggleSubtitle)
+  const setMasterVolume = useAppStore(s => s.setMasterVolume)
   const setBirthday = useAppStore(s => s.setBirthday)
   const setParentPin = useAppStore(s => s.setParentPin)
+  const setStudentGrade = useAppStore(s => s.setStudentGrade)
+  const exportData = useAppStore(s => s.exportData)
+  const importData = useAppStore(s => s.importData)
   const resetAll = useAppStore(s => s.resetAll)
   const setScreen = useAppStore(s => s.setScreen)
 
   const [birthInput, setBirthInput] = useState(game.birthday || '')
   const [pinInput, setPinInput] = useState('')
   const [resetStep, setResetStep] = useState(0)
+  const [importMsg, setImportMsg] = useState('')
+
+  const doBackup = () => {
+    const blob = new Blob([exportData()], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `마음정원_백업_${profile?.name || 'data'}.json`; a.click()
+    URL.revokeObjectURL(url)
+  }
+  const doRestore = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const ok = await importData(String(reader.result))
+      setImportMsg(ok ? '복원 완료! 잠시 후 새로고침돼요.' : '파일을 읽을 수 없어요.')
+      if (ok) setTimeout(() => window.location.reload(), 1200)
+    }
+    reader.readAsText(file)
+  }
 
   const row: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px', background: 'rgba(255,255,255,0.05)', borderRadius: 14, marginBottom: 10 }
 
@@ -37,6 +62,27 @@ export function SettingsScreen() {
           <button onClick={() => toggleMute('bgm')} style={{ padding: '6px 16px', borderRadius: 999, background: game.muteBgm ? 'rgba(255,255,255,0.1)' : 'var(--color-green)', color: game.muteBgm ? 'var(--color-text-soft)' : '#0f0f1e', fontWeight: 700 }}>
             {game.muteBgm ? '꺼짐' : '켜짐'}
           </button>
+        </div>
+        <div style={row}>
+          <span>🗣️ 캐릭터 목소리</span>
+          <button onClick={() => toggleMute('voice')} style={{ padding: '6px 16px', borderRadius: 999, background: game.muteVoice ? 'rgba(255,255,255,0.1)' : 'var(--color-green)', color: game.muteVoice ? 'var(--color-text-soft)' : '#0f0f1e', fontWeight: 700 }}>
+            {game.muteVoice ? '꺼짐' : '켜짐'}
+          </button>
+        </div>
+        <div style={row}>
+          <span>💬 자막 표시</span>
+          <button onClick={toggleSubtitle} style={{ padding: '6px 16px', borderRadius: 999, background: game.showSubtitle ? 'var(--color-green)' : 'rgba(255,255,255,0.1)', color: game.showSubtitle ? '#0f0f1e' : 'var(--color-text-soft)', fontWeight: 700 }}>
+            {game.showSubtitle ? '켜짐' : '꺼짐'}
+          </button>
+        </div>
+        <div style={{ ...row, flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>🔉 전체 음량</span>
+            <span style={{ color: 'var(--color-text-soft)' }}>{Math.round(game.masterVolume * 100)}%</span>
+          </div>
+          <input type="range" min={0} max={100} value={Math.round(game.masterVolume * 100)}
+            onChange={e => setMasterVolume(Number(e.target.value) / 100)}
+            style={{ width: '100%', accentColor: 'var(--color-green)' }} />
         </div>
 
         {/* 생일 */}
@@ -61,6 +107,30 @@ export function SettingsScreen() {
           <button onClick={() => setScreen('parentReport')} style={{ padding: '10px', borderRadius: 10, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)', fontSize: 16 }}>📊 부모 리포트 보기</button>
         </div>
 
+        {/* 자녀 학년 */}
+        <div style={{ ...row, flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+          <span>🎒 자녀 학년 (추천 미션 정렬용)</span>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {[1, 2, 3, 4, 5, 6].map(g => (
+              <button key={g} onClick={() => setStudentGrade(g)} style={{ flex: 1, padding: '12px 0', borderRadius: 10, fontWeight: 700,
+                background: game.studentGrade === g ? 'var(--color-primary)' : 'rgba(255,255,255,0.08)', color: game.studentGrade === g ? 'white' : 'var(--color-text-soft)' }}>{g}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* 데이터 백업/복원 */}
+        <div style={{ ...row, flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+          <span>💾 데이터 백업 (기기 변경 대비)</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={doBackup} style={{ flex: 1, padding: '10px', borderRadius: 10, background: 'rgba(124,92,255,0.25)', color: 'var(--color-text)', fontWeight: 700 }}>⬇️ 내보내기</button>
+            <label style={{ flex: 1, padding: '10px', borderRadius: 10, background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)', fontWeight: 700, textAlign: 'center', cursor: 'pointer' }}>
+              ⬆️ 가져오기
+              <input type="file" accept="application/json" onChange={doRestore} style={{ display: 'none' }} />
+            </label>
+          </div>
+          {importMsg && <span style={{ fontSize: 16, color: 'var(--color-green)' }}>{importMsg}</span>}
+        </div>
+
         {/* 데이터 초기화 */}
         <div style={{ ...row, flexDirection: 'column', alignItems: 'stretch', gap: 8, borderColor: 'rgba(255,126,126,0.3)' }}>
           <span style={{ color: '#ff7e7e' }}>🗑️ 데이터 초기화</span>
@@ -71,7 +141,7 @@ export function SettingsScreen() {
 
         {/* 앱 정보 */}
         <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--color-text-soft)', fontSize: 16, lineHeight: 1.7 }}>
-          <p>마음 정원: 솔로몬의 후계자 v2.0</p>
+          <p>마음 정원: 솔로몬의 후계자 v3.0</p>
           <p>{profile?.name}님과 함께한 정원 💚</p>
           <p style={{ opacity: 0.6 }}>광고·추적 없는 안전한 어린이 앱</p>
         </div>
