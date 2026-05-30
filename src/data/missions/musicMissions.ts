@@ -65,7 +65,7 @@ export const MUSIC_MISSIONS: DojoMission[] = [
         { prompt: '혼자서 부르는 노래는?', choices: ['독창', '합창', '연주', '춤'], answer: 0 },
         { prompt: '낮은 도와 높은 도 중, 더 높은 소리는?', emoji: '🎹', choices: ['높은 도', '낮은 도'], answer: 0 },
         { prompt: '피아노 건반을 오른쪽으로 갈수록 소리는?', emoji: '🎹', choices: ['높아져요', '낮아져요'], answer: 0 },
-        { prompt: '노래의 빠르기를 정하는 것은?', choices: ['박자', '색깔', '냄새', '무게'], answer: 0 }
+        { prompt: '노래에서 일정하게 반복되는 박은?', choices: ['박자', '색깔', '냄새', '무게'], answer: 0 }
       ]
     }
   },
