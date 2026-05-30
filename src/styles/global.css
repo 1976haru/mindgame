@@ -1,25 +1,6 @@
-/* ===== 폰트 (어린이 친화 둥근 폰트) =====
-   - Pretendard / Jua : Google Fonts·jsdelivr CDN (확실히 로드됨)
-   - Cafe24Ssurround / ONE-Mobile-POP / BMJUA : 눈누 CDN (@font-face)
-   로드 실패 시 폴백 폰트로 자연스럽게 대체됩니다. */
-@font-face {
-  font-family: 'Cafe24Ssurround';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Cafe24Ssurround.woff') format('woff');
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'BMJUA';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/BMJUA.woff') format('woff');
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'ONE-Mobile-POP';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/ONEMobilePOP.woff') format('woff');
-  font-weight: normal;
-  font-display: swap;
-}
+/* ===== 폰트 (어린이 친화) =====
+   제목: Jua (둥글고 귀여운 한글) · 본문: Pretendard (가독성 좋은 한글)
+   둘 다 index.html에서 웹폰트 CDN으로 로드 — 로컬/깨진 .woff @font-face 없음. */
 
 :root {
   --color-bg: #0f0f1e;
@@ -32,9 +13,9 @@
   --color-green: #6ee7b7;
   --color-blue: #93c5fd;
 
-  /* 본문: 둥근 어린이 폰트 / 제목: 귀엽고 큼직한 Cafe24 Ssurround */
-  --font-display: 'BMJUA', 'ONE-Mobile-POP', 'Jua', 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
-  --font-script: 'Cafe24Ssurround', 'Jua', 'BMJUA', 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  /* 본문: 가독성 좋은 Pretendard / 제목: 둥글고 귀여운 Jua */
+  --font-display: 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  --font-script: 'Jua', 'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
 
   --radius-sm: 12px;
   --radius-md: 20px;

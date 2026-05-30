@@ -48,14 +48,23 @@ export function playVoice(clipId: string, opts: PlayVoiceOptions = {}): Promise<
     try {
       stopVoice()
       const base = import.meta.env.BASE_URL || '/'
-      const audio = new Audio(`${base}voices/${clipId}.mp3`)
+      const src = `${base}voices/${clipId}.mp3`
+      const audio = new Audio(src)
       audio.volume = masterVolume
       currentAudio = audio
       audio.onended = finish
-      audio.onerror = finish // 파일 없어도 진행(폴백)
+      audio.onerror = () => {
+        // 파일 없음(404) 등 — 진행(폴백). 개발 모드에선 원인 로깅.
+        if (import.meta.env.DEV) console.warn('[voice] 로드 실패(404 등):', src)
+        finish()
+      }
       const playResult = audio.play()
       if (playResult && typeof playResult.catch === 'function') {
-        playResult.catch(() => finish()) // 브라우저 자동재생 차단 등
+        playResult.catch((e) => {
+          // 브라우저 자동재생 차단 등 — 진행. 개발 모드에선 원인 로깅.
+          if (import.meta.env.DEV) console.warn('[voice] 재생 차단/실패:', clipId, e?.name || e)
+          finish()
+        })
       }
     } catch {
       // 음성 재생 실패해도 게임 진행

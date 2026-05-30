@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { SolomonOwl, SpeechBubble } from '../characters/SolomonOwl'
+import { playVoice } from '../../utils/voice'
 
 const LINES = [
   '안녕, [name]. 나는 황금 부엉이 솔로몬이야.',
@@ -21,6 +22,11 @@ export function SolomonIntroScreen() {
   const name = profile?.name || '친구'
   const text = LINES[idx].replace('[name]', name)
   const isLast = idx === LINES.length - 1
+
+  // 대사가 바뀔 때마다 해당 솔로몬 음성 재생 (solomon_intro_01~04)
+  useEffect(() => {
+    void playVoice(`solomon_intro_0${idx + 1}`)
+  }, [idx])
 
   const handleTap = () => {
     if (!typingDone) return

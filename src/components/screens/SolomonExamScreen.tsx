@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
+import { playVoice } from '../../utils/voice'
 import { DOJO_BY_ID } from '../../data/dojos'
 import { getMissionsByRank } from '../../data/missions'
 import { SolomonOwl, SpeechBubble } from '../characters/SolomonOwl'
@@ -21,12 +22,18 @@ export function SolomonExamScreen() {
   const [stage, setStage] = useState<'intro' | 'exam'>('intro')
   const [introDone, setIntroDone] = useState(false)
 
+  // 시험 시작 시 솔로몬 안내 음성
+  useEffect(() => {
+    if (stage === 'intro') void playVoice('solomon_exam_intro')
+  }, [stage])
+
   if (!activeDojoId) { setScreen('dojoHall'); return null }
   const dojo = DOJO_BY_ID[activeDojoId]
   // 종합 평가 = 가장 어려운 1급 미션
   const examMission = getMissionsByRank(activeDojoId, 1)[0]
 
   const finish = async (success: boolean, _r?: EngineResult) => {
+    void playVoice(success ? 'solomon_exam_pass' : 'solomon_exam_fail')
     if (success) { await completeShihan(activeDojoId); setScreen('shihanCutscene') }
     else setScreen('dojoDetail')
   }

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
+import { playVoice } from '../../utils/voice'
 import { getEpisodeById } from '../../data/episodes'
 import { getHeroById } from '../../data/heroes'
 import { BUILDING_BY_ID } from '../../data/buildings'
@@ -24,6 +25,11 @@ export function CourtroomScreen() {
   const [explainDone, setExplainDone] = useState(false)
   const [reward, setReward] = useState<{ heroId?: string; buildingId?: string; reward: number } | null>(null)
 
+  // 재판소 입장 시 솔로몬 안내 음성
+  useEffect(() => {
+    void playVoice('solomon_episode_intro')
+  }, [])
+
   if (!ep) { setScreen('kingdom'); return null }
 
   const STEPS: Step[] = ['situation', 'plea', 'choice', 'explain', 'verdict']
@@ -32,9 +38,11 @@ export function CourtroomScreen() {
   const handleChoice = (idx: number) => {
     if (ep.choices[idx].correct) {
       playSound('correct')
+      void playVoice('solomon_episode_correct')
       setStep('explain')
     } else {
       playSound('wrong')
+      void playVoice('solomon_episode_wrong')
       setWrongPick(idx)
       setTimeout(() => setWrongPick(null), 1200)
     }

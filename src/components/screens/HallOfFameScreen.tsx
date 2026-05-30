@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
+import { playVoice } from '../../utils/voice'
 import { DOJOS } from '../../data/dojos'
 import { SolomonOwl } from '../characters/SolomonOwl'
 import { MentorAvatar } from '../mentors/MentorComponents'
@@ -26,6 +27,13 @@ export function HallOfFameScreen() {
     if (line >= LINES.length) return
     const t = setTimeout(() => setLine(l => l + 1), 1400)
     return () => clearTimeout(t)
+  }, [line, eligible])
+
+  // 엔딩 솔로몬 음성 (한 줄씩 ending_01~04, 마지막 줄에서 04→05 이어서)
+  useEffect(() => {
+    if (!eligible) return
+    const n = Math.min(line + 1, 5)
+    void playVoice(`solomon_ending_0${n}`, n === 4 ? { onEnd: () => { void playVoice('solomon_ending_05') } } : {})
   }, [line, eligible])
 
   if (!eligible) {
