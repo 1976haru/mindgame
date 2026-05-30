@@ -29,7 +29,7 @@ export const BALLET_MISSIONS: DojoMission[] = [
   {
     id: 'ballet-8', dojoId: 'ballet', rank: 8, title: '동작 따라하기', description: '백조 공주의 3동작을 따라 해요',
     missionType: 'dance_sequence', passCondition: '순서 맞히기', rewards: R(4),
-    config: { moves: FOUR, sequence: ['up', 'turn', 'bow'] }
+    config: { moves: FOUR, sequence: ['up', 'side', 'turn'] }
   },
   {
     id: 'ballet-7', dojoId: 'ballet', rank: 7, title: '5동작 시퀀스', description: '5개 동작 순서를 기억해요',
