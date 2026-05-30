@@ -6,9 +6,11 @@ import { FRIENDS } from '../../data/friends'
 import { HEROES } from '../../data/heroes'
 import { PLANT_COMPONENTS } from '../plants'
 import { FRIEND_COMPONENTS } from '../friends/FriendComponents'
+import { DOJOS, RANK_SEQUENCE, rankName, DojoRank } from '../../data/dojos'
+import { MentorAvatar } from '../mentors/MentorComponents'
 import { BottomNav } from '../common/BottomNav'
 
-type Tab = 'plants' | 'friends' | 'heroes'
+type Tab = 'plants' | 'friends' | 'heroes' | 'dojo'
 
 const RARITY_LABEL: Record<Rarity, string> = { common: '일반', rare: '희귀', epic: '에픽', legendary: '전설' }
 const RARITY_COLOR: Record<Rarity, string> = { common: '#9ca3af', rare: '#60a5fa', epic: '#c084fc', legendary: '#fbbf24' }
@@ -30,9 +32,9 @@ export function CollectionScreen() {
 
       {/* 탭 */}
       <div style={{ display: 'flex', gap: 8, padding: '8px 16px', width: '100%' }}>
-        {([['plants', '🌱 식물'], ['friends', '🐾 친구'], ['heroes', '🃏 영웅']] as [Tab, string][]).map(([t, label]) => (
+        {([['plants', '🌱 식물'], ['friends', '🐾 친구'], ['heroes', '🃏 영웅'], ['dojo', '🏯 도장']] as [Tab, string][]).map(([t, label]) => (
           <button key={t} onClick={() => setTab(t)} style={{
-            flex: 1, padding: '10px', borderRadius: 12, fontSize: 16, fontWeight: 700,
+            flex: 1, padding: '10px 4px', borderRadius: 12, fontSize: 15, fontWeight: 700,
             background: tab === t ? 'rgba(124,92,255,0.3)' : 'rgba(255,255,255,0.06)',
             color: tab === t ? 'var(--color-accent)' : 'var(--color-text-soft)'
           }}>{label}</button>
@@ -91,6 +93,26 @@ export function CollectionScreen() {
               padding: '14px 28px', borderRadius: 'var(--radius-md)', fontSize: 16, fontWeight: 700,
               background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', color: '#1f2937'
             }}>영웅 카드 도감 열기 →</motion.button>
+          </div>
+        )}
+
+        {tab === 'dojo' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <p style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>멘토 카드와 도장 메달을 모아요</p>
+            {DOJOS.map(d => {
+              const p = game.dojoProgress[d.id]
+              const earned = RANK_SEQUENCE.filter(r => p.achievedRanks.includes(r))
+              return (
+                <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 10, borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: `2px solid ${p.isShihan ? '#ffd84d' : d.color + '44'}` }}>
+                  <MentorAvatar mentorId={d.mentor.id} size={56} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 16, fontWeight: 700 }}>{d.icon} {d.mentor.name}</div>
+                    <div style={{ fontSize: 16, color: 'var(--color-text-soft)' }}>{p.isShihan ? '🏅 사범 달성!' : earned.length ? `최고 ${rankName(Math.min(...earned.filter(r => r !== 0)) as DojoRank)} · 메달 ${earned.length}개` : '아직 메달 없음'}</div>
+                  </div>
+                  {p.isShihan && <span style={{ fontSize: 24 }}>👑</span>}
+                </div>
+              )
+            })}
           </div>
         )}
       </div>

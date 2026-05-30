@@ -6,12 +6,19 @@ import { BottomNav } from '../common/BottomNav'
 import { GardenAmbience } from '../common/GardenAmbience'
 import { isNightTime, isBirthdayToday } from '../../utils/timeUtils'
 import { pendingTreasureMilestone } from '../../utils/gameLogic'
+import { todayString } from '../../utils/helpers'
+import { DOJOS } from '../../data/dojos'
 
 export function GardenScreen() {
   const profile = useAppStore(s => s.profile)
   const entries = useAppStore(s => s.entries)
   const game = useAppStore(s => s.game)
   const setScreen = useAppStore(s => s.setScreen)
+
+  const dailyDone = game.dailyClaimedDate === todayString()
+  // 솔로몬의 후계자 진행률 (도장 사범 7 + 법교육 15 = 22)
+  const shihan = DOJOS.filter(d => game.dojoProgress[d.id].isShihan).length
+  const heirPct = Math.round(((shihan + game.clearedEpisodes.length) / 22) * 100)
 
   const night = isNightTime()
   const birthday = isBirthdayToday(game.birthday)
@@ -89,9 +96,29 @@ export function GardenScreen() {
         ))}
       </div>
 
+      {/* 오늘의 도전 배너 + 후계자 진행률 */}
+      <div style={{ padding: '8px 20px 0', width: '100%' }}>
+        {!dailyDone && (
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => setScreen('dailyChallenge')}
+            style={{ width: '100%', padding: '10px 14px', borderRadius: 12, background: 'linear-gradient(135deg,#7c5cff,#ec4899)', color: 'white', fontWeight: 700, fontSize: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>🎯 오늘의 도전</span><span style={{ fontSize: 16 }}>🔥 {game.dailyStreak}일</span>
+          </motion.button>
+        )}
+        {heirPct > 0 && (
+          <div style={{ marginTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, color: 'var(--color-text-soft)', marginBottom: 2 }}>
+              <span>👑 솔로몬의 후계자까지</span><span>{heirPct}%</span>
+            </div>
+            <div style={{ height: 6, borderRadius: 6, background: 'rgba(255,255,255,0.1)' }}>
+              <div style={{ width: `${heirPct}%`, height: '100%', borderRadius: 6, background: 'linear-gradient(90deg,#fbbf24,#ff9ec7,#7c5cff)' }} />
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* 하단 액션 */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
-        style={{ padding: '12px 20px 8px', width: '100%', display: 'flex', gap: 10 }}>
+        style={{ padding: '10px 20px 8px', width: '100%', display: 'flex', gap: 10 }}>
         <motion.button whileTap={{ scale: 0.96 }} onClick={() => setScreen('minigames')}
           style={{ padding: '16px', fontSize: 18, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.08)', color: 'var(--color-text)' }}>
           🎮

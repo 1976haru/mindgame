@@ -9,6 +9,10 @@ ios
 .env
 .env.local
 *.log
+
+# 음성 파일은 기본적으로 커밋(Vercel 서빙, 배포 옵션 A).
+# 용량이 100MB를 초과해 외부 스토리지(옵션 B)로 전환할 경우 아래 주석 해제.
+# public/voices/*.mp3
 .vscode/
 .idea/
 *.tsbuildinfo
