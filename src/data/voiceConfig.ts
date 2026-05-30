@@ -27,7 +27,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   mozart_squirrel: {
     id: 'mozart_squirrel',
     name: '모차르트 다람쥐',
-    voiceId: 'PLACEHOLDER_MOZART', // ← 밝고 경쾌한 목소리
+    voiceId: 'nHOCkCilU5qpFALFAEuy', // ← 밝고 경쾌한 목소리
     description: '활기차고 빠른 톤의 명랑한 목소리',
     settings: { stability: 0.5, similarity_boost: 0.7, style: 0.5 },
   },
