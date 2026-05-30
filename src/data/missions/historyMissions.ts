@@ -18,7 +18,7 @@ export const HISTORY_MISSIONS: DojoMission[] = [
     }
   },
   {
-    id: 'history-8', dojoId: 'history', rank: 8, title: '삼국시대 영웅', description: '나라를 세운 시조를 짝지어요',
+    id: 'history-8', dojoId: 'history', rank: 8, title: '삼국시대 영웅', description: '삼국시대 인물과 한 일을 짝지어요',
     missionType: 'card_match', passCondition: '모두 짝짓기', rewards: R(5),
     config: {
       pairs: [
@@ -88,7 +88,7 @@ export const HISTORY_MISSIONS: DojoMission[] = [
         { prompt: '임진왜란 때 바다에서 나라를 지킨 장군은?', choices: ['이순신', '강감찬', '김유신', '권율'], answer: 0 },
         { prompt: '이순신 장군이 만든 거북 모양 배는?', emoji: '🐢', choices: ['거북선', '판옥선', '나룻배', '뗏목'], answer: 0 },
         { prompt: '명량해전에서 이순신의 배는 몇 척이었나요?', choices: ['12척', '100척', '50척', '300척'], answer: 0, explain: '12척으로 큰 적을 막아낸 기적이에요.' },
-        { prompt: '학의 날개처럼 적을 감싸는 이순신의 전법은?', choices: ['학익진', '돌격진', '거북진', '방패진'], answer: 0 }
+        { prompt: '학의 날개처럼 적을 감싸는 이순신의 전법은?', choices: ['학익진', '돌격진', '거북진', '방패진'], answer: 0, explain: '한산도대첩에서 크게 활약한 전법이에요.' }
       ]
     }
   },

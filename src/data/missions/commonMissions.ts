@@ -37,7 +37,7 @@ export const COMMON_MISSIONS: DojoMission[] = [
       questions: [
         { prompt: '새는 무엇으로 하늘을 날까요?', emoji: '🐦', choices: ['날개', '지느러미', '다리', '꼬리'], answer: 0 },
         { prompt: '물고기는 어디에서 살까요?', emoji: '🐟', choices: ['물속', '나무 위', '하늘', '땅속'], answer: 0 },
-        { prompt: '나비가 되기 전의 모습은?', emoji: '🐛', choices: ['애벌레', '강아지', '새', '물고기'], answer: 0 },
+        { prompt: '나비가 되기 전의 모습은?', emoji: '🐛', choices: ['애벌레', '강아지', '새', '물고기'], answer: 0, explain: '애벌레가 번데기를 거쳐 나비가 돼요.' },
         { prompt: '식물이 잘 자라려면 필요한 것은?', emoji: '🌱', choices: ['햇빛과 물', '과자', '돌', '어둠'], answer: 0 }
       ]
     }
