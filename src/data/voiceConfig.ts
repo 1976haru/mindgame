@@ -41,7 +41,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   swan_princess: {
     id: 'swan_princess',
     name: '백조 공주',
-    voiceId: 'PLACEHOLDER_SWAN', // ← 우아한 여성 목소리
+    voiceId: '4SXIn0z5npZXq3ZxihdW', // ← 우아한 여성 목소리
     description: '부드럽고 우아한 여성 목소리',
     settings: { stability: 0.7, similarity_boost: 0.75, style: 0.4 },
   },
