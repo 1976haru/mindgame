@@ -66,10 +66,11 @@ export interface GameState {
   birthday?: string               // MM-DD
   parentPin?: string
   muteSfx: boolean
-  muteBgm: boolean
+  muteBgm: boolean          // 배경음악 음소거 (기본 ON=음소거, 설정에서 켤 수 있음)
   muteVoice: boolean        // 캐릭터 목소리 음소거
   showSubtitle: boolean     // 자막 표시 (기본 ON, 접근성)
   masterVolume: number      // 전체 음량 0~1
+  bgmDefaultMigrated: boolean  // 기존 사용자에게 'BGM 기본 OFF'를 1회 적용했는지
 
   // 내 법전 다짐
   lawbookVows: Record<string, string>  // episodeId -> 다짐 문장
@@ -177,10 +178,11 @@ export function defaultGameState(): GameState {
     paintedCount: 0,
     treasureClaimedMilestones: [],
     muteSfx: false,
-    muteBgm: false,
+    muteBgm: true,          // 배경음악 기본 OFF (효과음·음성은 유지). 설정에서 켤 수 있음
     muteVoice: false,
     showSubtitle: true,
     masterVolume: 1,
+    bgmDefaultMigrated: true,
     lawbookVows: {},
     paintedPlants: [],
     dojoProgress: emptyDojoProgress(),
@@ -278,12 +280,19 @@ export async function loadGameState(): Promise<GameState | null> {
   const loaded = (await db.get('game', 'current')) as GameState | undefined
   if (!loaded) return null
   // 누락 필드 보정 (마이그레이션 안전장치)
-  return {
+  const merged = {
     ...defaultGameState(),
     ...loaded,
     emotionCounts: { ...emptyEmotionCounts(), ...loaded.emotionCounts },
     dojoProgress: { ...emptyDojoProgress(), ...(loaded.dojoProgress || {}) }
   }
+  // 'BGM 기본 OFF' 1회 마이그레이션: 아직 적용 안 된 기존 사용자는 한 번만 BGM을 끈다.
+  // 이후엔 플래그가 켜져 있어 설정 토글로 자유롭게 켜고 끌 수 있다.
+  if (loaded.bgmDefaultMigrated !== true) {
+    merged.muteBgm = true
+    merged.bgmDefaultMigrated = true
+  }
+  return merged
 }
 
 export async function clearAllData(): Promise<void> {
