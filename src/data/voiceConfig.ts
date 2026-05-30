@@ -62,7 +62,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   curious_fox: {
     id: 'curious_fox',
     name: '호기심 여우',
-    voiceId: 'PLACEHOLDER_FOX', // ← 호기심 많은 발랄한 목소리
+    voiceId: 'e8UWvHOSyce2b175AUDL', // ← 호기심 많은 발랄한 목소리
     description: '궁금증 가득한 발랄하고 친근한 목소리',
     settings: { stability: 0.5, similarity_boost: 0.7, style: 0.5 },
   },
