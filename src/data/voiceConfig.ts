@@ -69,7 +69,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   number_bear: {
     id: 'number_bear',
     name: '숫자 곰돌이',
-    voiceId: 'PLACEHOLDER_BEAR', // ← 느긋하고 다정한 목소리
+    voiceId: 'tNv1bzo5okCGrADIRCQ7', // ← 느긋하고 다정한 목소리
     description: '느긋하고 다정하지만 논리적인 목소리',
     settings: { stability: 0.7, similarity_boost: 0.75, style: 0.3 },
   },
