@@ -75,7 +75,7 @@ export interface Dojo {
   description: string
   finalReward: {
     heroId: string
-    buildingId: string
+    buildingId?: string   // (미구현) 도장→왕국 건물. 현재 어떤 코드도 사용하지 않음
     titleName: string
   }
 }
@@ -85,43 +85,43 @@ export const DOJOS: Dojo[] = [
     id: 'music', name: '음악 도장', shortName: '음악', icon: '🎵', color: '#ff9ec7',
     mentor: { id: 'mozart_squirrel', name: '모차르트 다람쥐', personality: '활기차고 음악을 사랑하는 천재 다람쥐', catchphrase: '음악은 마음의 언어란다!' },
     description: '소리와 리듬으로 마음을 표현해요',
-    finalReward: { heroId: 'sejong', buildingId: 'music_dojo', titleName: '음악 도장 사범' }
+    finalReward: { heroId: 'sejong', titleName: '음악 도장 사범' }
   },
   {
     id: 'pe', name: '체육 도장', shortName: '체육', icon: '🏃', color: '#fbbf24',
     mentor: { id: 'lightning_rabbit', name: '번개 토끼', personality: '에너지 넘치고 도전을 사랑하는 운동 천재', catchphrase: '몸과 마음은 함께 자란단다!' },
     description: '박자와 타이밍으로 몸을 깨워요',
-    finalReward: { heroId: 'yisunsin', buildingId: 'pe_dojo', titleName: '체육 도장 사범' }
+    finalReward: { heroId: 'yisunsin', titleName: '체육 도장 사범' }
   },
   {
     id: 'ballet', name: '발레 도장', shortName: '발레', icon: '💃', color: '#c084fc',
     mentor: { id: 'swan_princess', name: '백조 공주', personality: '우아하고 따뜻하게 이끄는 무용 선생님', catchphrase: '몸짓에도 마음이 담긴단다.' },
     description: '동작과 율동으로 아름다움을 배워요',
-    finalReward: { heroId: 'shinsaimdang', buildingId: 'ballet_dojo', titleName: '발레 도장 사범' }
+    finalReward: { heroId: 'shinsaimdang', titleName: '발레 도장 사범' }
   },
   {
     id: 'history', name: '한국사 도장', shortName: '한국사', icon: '📚', color: '#a16207',
     mentor: { id: 'time_owl', name: '시간 부엉이', personality: '지혜롭고 차분하게 옛이야기를 들려주는 학자', catchphrase: '과거를 알면 미래가 보인단다.' },
     description: '우리나라의 역사를 만나요',
-    finalReward: { heroId: 'jeongyakyong', buildingId: 'history_dojo', titleName: '한국사 도장 사범' }
+    finalReward: { heroId: 'jeongyakyong', titleName: '한국사 도장 사범' }
   },
   {
     id: 'korean', name: '국어 도장', shortName: '국어', icon: '🇰🇷', color: '#34d399',
     mentor: { id: 'sejong_turtle', name: '세종 거북이', personality: '느긋하지만 또박또박 한글을 가르치는 선생님', catchphrase: '바른 말이 바른 마음이란다.' },
     description: '한글과 우리말을 익혀요',
-    finalReward: { heroId: 'jangyeongsil', buildingId: 'korean_dojo', titleName: '국어 도장 사범' }
+    finalReward: { heroId: 'jangyeongsil', titleName: '국어 도장 사범' }
   },
   {
     id: 'common', name: '상식 도장', shortName: '상식', icon: '🌍', color: '#f97316',
     mentor: { id: 'curious_fox', name: '호기심 여우', personality: '궁금한 게 많고 똘똘한 탐험가', catchphrase: '왜 그럴까? 함께 알아봐요!' },
     description: '세상의 다양한 지식을 모아요',
-    finalReward: { heroId: 'kimgu', buildingId: 'common_dojo', titleName: '상식 도장 사범' }
+    finalReward: { heroId: 'kimgu', titleName: '상식 도장 사범' }
   },
   {
     id: 'math', name: '수학 도장', shortName: '수학', icon: '🧮', color: '#3b82f6',
     mentor: { id: 'number_bear', name: '숫자 곰돌이', personality: '느긋하고 따뜻하지만 논리적인 수학 천재', catchphrase: '수학은 게임 같은 거란다!' },
     description: '숫자와 모양으로 두뇌를 깨워요',
-    finalReward: { heroId: 'heojun', buildingId: 'math_dojo', titleName: '수학 도장 사범' }
+    finalReward: { heroId: 'heojun', titleName: '수학 도장 사범' }
   }
 ]
 

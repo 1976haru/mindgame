@@ -279,10 +279,15 @@ export async function loadGameState(): Promise<GameState | null> {
   const db = await getDB()
   const loaded = (await db.get('game', 'current')) as GameState | undefined
   if (!loaded) return null
-  // 누락 필드 보정 (마이그레이션 안전장치)
-  const merged = {
+  return migrateLoadedGame(loaded)
+}
+
+// 저장된 게임 상태를 현재 스키마로 보정(누락 필드 기본값 채움 + 1회 마이그레이션).
+// 순수 함수 — IndexedDB 없이도 테스트 가능.
+export function migrateLoadedGame(loaded: Partial<GameState>): GameState {
+  const merged: GameState = {
     ...defaultGameState(),
-    ...loaded,
+    ...(loaded as GameState),
     emotionCounts: { ...emptyEmotionCounts(), ...loaded.emotionCounts },
     dojoProgress: { ...emptyDojoProgress(), ...(loaded.dojoProgress || {}) }
   }
