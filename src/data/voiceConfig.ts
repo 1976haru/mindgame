@@ -34,7 +34,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   lightning_rabbit: {
     id: 'lightning_rabbit',
     name: '번개 토끼',
-    voiceId: 'PLACEHOLDER_RABBIT', // ← 에너지 넘치는 젊은 목소리
+    voiceId: 'jYxolqdpkmUicfIhdPBd', // ← 에너지 넘치는 젊은 목소리
     description: '힘차고 응원하는 듯한 활발한 목소리',
     settings: { stability: 0.45, similarity_boost: 0.7, style: 0.6 },
   },
