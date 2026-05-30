@@ -55,7 +55,7 @@ export const VOICE_CHARACTERS: Record<string, VoiceCharacter> = {
   sejong_turtle: {
     id: 'sejong_turtle',
     name: '세종 거북이',
-    voiceId: 'PLACEHOLDER_TURTLE', // ← 느리고 따뜻한 목소리
+    voiceId: '1MIh4sWscOMnPPee6H2c', // ← 느리고 따뜻한 목소리
     description: '느긋하고 따뜻하며 또박또박한 목소리 (받아쓰기용 - 발음 정확)',
     settings: { stability: 0.85, similarity_boost: 0.8, style: 0.2 },
   },
