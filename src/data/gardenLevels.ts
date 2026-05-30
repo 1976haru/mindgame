@@ -38,7 +38,8 @@ export function levelProgress(xp: number): { level: number; ratio: number; toNex
   if (!next) return { level, ratio: 1, toNext: 0, isMax: true }
   const span = next.requiredXp - cur.requiredXp
   const into = xp - cur.requiredXp
-  return { level, ratio: Math.min(1, into / span), toNext: next.requiredXp - xp, isMax: false }
+  // ratio는 항상 0~1로 클램프(음수/초과 XP에도 진행바가 안전하게 렌더되도록)
+  return { level, ratio: Math.max(0, Math.min(1, into / span)), toNext: Math.max(0, next.requiredXp - xp), isMax: false }
 }
 
 // XP 획득량 (활동별)
