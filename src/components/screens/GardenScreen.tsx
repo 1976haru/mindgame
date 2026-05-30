@@ -20,6 +20,7 @@ import { THEME_BY_ID, DECO_BY_ID } from '../../data/decorations'
 import { levelProgress, gardenLevelInfo } from '../../data/gardenLevels'
 import { calculateHealth, HEALTH_STATES } from '../../data/growth'
 import { problemForContext, MathProblem } from '../../data/mathGarden'
+import { t } from '../../i18n'
 
 export function GardenScreen() {
   const profile = useAppStore(s => s.profile)
@@ -109,7 +110,7 @@ export function GardenScreen() {
             style={{ position: 'absolute', top: '38%', left: 0, right: 0, textAlign: 'center', padding: '0 32px' }}>
             <div style={{ fontSize: 60, marginBottom: 16 }}>🌱</div>
             <p style={{ color: 'var(--color-text-soft)', lineHeight: 1.6 }}>
-              아직 정원이 비어있어요.<br />오늘의 마음을 들려줄래요?
+              {t('garden.empty', game.lang)}<br />{t('garden.emptyAsk', game.lang)}
             </p>
           </motion.div>
         ) : (
@@ -233,7 +234,7 @@ export function GardenScreen() {
         )}
         <motion.button whileTap={{ scale: 0.96 }} onClick={() => (decorMode ? setDecorMode(false) : setScreen('emotionSelect'))}
           style={{ flex: 1, padding: '16px', fontSize: 20, fontWeight: 700, borderRadius: 'var(--radius-md)', background: 'linear-gradient(135deg, #7c5cff 0%, #ff9ec7 100%)', color: 'white', boxShadow: 'var(--shadow-soft)' }}>
-          {decorMode ? '꾸미기 완료 ✓' : '오늘의 마음 ✨'}
+          {decorMode ? '✓' : t('action.todaysHeart', game.lang)}
         </motion.button>
       </motion.div>
 

@@ -1,9 +1,16 @@
 // 사전 생성된 mp3(public/voices/*.mp3)를 재생. 자막 동기화 지원.
 // 음성 파일이 없거나 재생 실패해도 절대 크래시하지 않고 진행(자막 폴백).
 
+import type { Lang } from '../i18n'
+
 let currentAudio: HTMLAudioElement | null = null
 let isVoiceMuted = false
 let masterVolume = 1 // 0~1
+let voiceLang: Lang = 'ko' // 현재 음성 언어
+
+export function setVoiceLang(lang: Lang) {
+  voiceLang = lang
+}
 
 export function setVoiceMuted(muted: boolean) {
   isVoiceMuted = muted
@@ -48,20 +55,29 @@ export function playVoice(clipId: string, opts: PlayVoiceOptions = {}): Promise<
     try {
       stopVoice()
       const base = import.meta.env.BASE_URL || '/'
-      const src = `${base}voices/${clipId}.mp3`
-      const audio = new Audio(src)
+      const koSrc = `${base}voices/${clipId}.mp3`
+      // 현재 언어 경로 → 없으면 한국어로 폴백
+      const primary = voiceLang === 'ko' ? koSrc : `${base}voices/${voiceLang}/${clipId}.mp3`
+      const audio = new Audio(primary)
       audio.volume = masterVolume
       currentAudio = audio
       audio.onended = finish
+      let triedKoFallback = false
       audio.onerror = () => {
-        // 파일 없음(404) 등 — 진행(폴백). 개발 모드에선 원인 로깅.
-        if (import.meta.env.DEV) console.warn('[voice] 로드 실패(404 등):', src)
+        if (!triedKoFallback && audio.src.indexOf(koSrc) === -1) {
+          // 해당 언어 음성 없음 → 한국어 음성으로 폴백(크래시 방지)
+          triedKoFallback = true
+          audio.src = koSrc
+          const r = audio.play()
+          if (r && typeof r.catch === 'function') r.catch(() => finish())
+          return
+        }
+        if (import.meta.env.DEV) console.warn('[voice] 로드 실패(404 등):', audio.src)
         finish()
       }
       const playResult = audio.play()
       if (playResult && typeof playResult.catch === 'function') {
         playResult.catch((e) => {
-          // 브라우저 자동재생 차단 등 — 진행. 개발 모드에선 원인 로깅.
           if (import.meta.env.DEV) console.warn('[voice] 재생 차단/실패:', clipId, e?.name || e)
           finish()
         })

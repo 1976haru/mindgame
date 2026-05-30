@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
 import { BottomNav } from '../common/BottomNav'
+import { LANGUAGES, t } from '../../i18n'
 
 export function SettingsScreen() {
   const game = useAppStore(s => s.game)
@@ -12,6 +13,8 @@ export function SettingsScreen() {
   const setBirthday = useAppStore(s => s.setBirthday)
   const setParentPin = useAppStore(s => s.setParentPin)
   const setStudentGrade = useAppStore(s => s.setStudentGrade)
+  const setLang = useAppStore(s => s.setLang)
+  const lang = game.lang
   const exportData = useAppStore(s => s.exportData)
   const importData = useAppStore(s => s.importData)
   const resetAll = useAppStore(s => s.resetAll)
@@ -46,27 +49,42 @@ export function SettingsScreen() {
   return (
     <div className="screen" style={{ justifyContent: 'flex-start', padding: 0 }}>
       <div style={{ width: '100%', padding: '18px 20px 4px' }}>
-        <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>설정</h2>
+        <h2 style={{ fontSize: 24, fontFamily: 'var(--font-script)', color: 'var(--color-accent)' }}>{t('settings.title', lang)}</h2>
       </div>
 
       <div style={{ flex: 1, width: '100%', overflowY: 'auto', padding: '12px 16px' }}>
+        {/* 언어 선택 */}
+        <div style={{ ...row, flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+          <span>🌍 {t('settings.language', lang)}</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {LANGUAGES.map(l => (
+              <button key={l.code} onClick={() => setLang(l.code)}
+                style={{ flex: 1, padding: '10px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+                  background: lang === l.code ? 'var(--color-accent)' : 'rgba(255,255,255,0.08)',
+                  color: lang === l.code ? '#0f0f1e' : 'var(--color-text)' }}>
+                {l.flag} {l.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* 소리 */}
         <div style={row}>
-          <span>🔊 효과음</span>
+          <span>🔊 {t('settings.sfx', lang)}</span>
           <button onClick={() => toggleMute('sfx')} style={{ padding: '6px 16px', borderRadius: 999, background: game.muteSfx ? 'rgba(255,255,255,0.1)' : 'var(--color-green)', color: game.muteSfx ? 'var(--color-text-soft)' : '#0f0f1e', fontWeight: 700 }}>
-            {game.muteSfx ? '꺼짐' : '켜짐'}
+            {game.muteSfx ? t('settings.off', lang) : t('settings.on', lang)}
           </button>
         </div>
         <div style={row}>
-          <span>🎵 배경음</span>
+          <span>🎵 {t('settings.bgm', lang)}</span>
           <button onClick={() => toggleMute('bgm')} style={{ padding: '6px 16px', borderRadius: 999, background: game.muteBgm ? 'rgba(255,255,255,0.1)' : 'var(--color-green)', color: game.muteBgm ? 'var(--color-text-soft)' : '#0f0f1e', fontWeight: 700 }}>
-            {game.muteBgm ? '꺼짐' : '켜짐'}
+            {game.muteBgm ? t('settings.off', lang) : t('settings.on', lang)}
           </button>
         </div>
         <div style={row}>
-          <span>🗣️ 캐릭터 목소리</span>
+          <span>🗣️ {t('settings.voice', lang)}</span>
           <button onClick={() => toggleMute('voice')} style={{ padding: '6px 16px', borderRadius: 999, background: game.muteVoice ? 'rgba(255,255,255,0.1)' : 'var(--color-green)', color: game.muteVoice ? 'var(--color-text-soft)' : '#0f0f1e', fontWeight: 700 }}>
-            {game.muteVoice ? '꺼짐' : '켜짐'}
+            {game.muteVoice ? t('settings.off', lang) : t('settings.on', lang)}
           </button>
         </div>
         <div style={row}>

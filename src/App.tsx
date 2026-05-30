@@ -39,7 +39,7 @@ import { GardenDiaryScreen } from './components/screens/GardenDiaryScreen'
 import { Subtitle } from './components/common/Subtitle'
 import * as Tone from 'tone'
 import { setSfxMuted, setSoundVolume } from './utils/sound'
-import { setVoiceMuted, setVoiceVolume } from './utils/voice'
+import { setVoiceMuted, setVoiceVolume, setVoiceLang } from './utils/voice'
 import { startBGM, stopBGM, setMusicMuted, setMusicVolume, BgmType } from './utils/music'
 import { setMelodyMuted } from './utils/melodies'
 import { setSfxVolume } from './utils/sfx'
@@ -66,6 +66,7 @@ export default function App() {
   const muteBgm = useAppStore(s => s.game.muteBgm)
   const muteVoice = useAppStore(s => s.game.muteVoice)
   const masterVolume = useAppStore(s => s.game.masterVolume)
+  const lang = useAppStore(s => s.game.lang)
 
   useEffect(() => {
     if (!loaded) {
@@ -73,6 +74,9 @@ export default function App() {
       return () => clearTimeout(t)
     }
   }, [loaded, initialize])
+
+  // 음성 언어 동기화 (언어 바꾸면 음성도 해당 언어 경로로)
+  useEffect(() => { setVoiceLang(lang) }, [lang])
 
   // 첫 사용자 인터랙션에서 오디오 활성화 (브라우저 자동재생 정책)
   useEffect(() => {

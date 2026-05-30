@@ -20,6 +20,9 @@ export interface VoiceScript {
 import { buildMissionGuideScripts } from './missionVoice'
 // 반응/식물대화/위인 음성 (작업 2~4)
 import { buildExtraVoiceScripts } from './voiceExtra'
+// 다국어 자막/대사
+import type { Lang } from '../i18n'
+import { voiceTextFor } from './voiceI18n'
 
 // ── A. 솔로몬 부엉이 ─────────────────────────────────────────────
 const SOLOMON: VoiceScript[] = [
@@ -254,6 +257,11 @@ export const SCRIPT_TEXT_BY_ID: Record<string, string> = VOICE_SCRIPTS.reduce(
 
 export function scriptText(id: string): string | undefined {
   return SCRIPT_TEXT_BY_ID[id]
+}
+
+// 현재 언어의 자막/대사 텍스트 (번역 없으면 한국어 폴백)
+export function scriptTextLang(id: string, lang: Lang): string | undefined {
+  return voiceTextFor(id, lang, SCRIPT_TEXT_BY_ID[id])
 }
 
 // 멘토 성공/실패 대사 중 무작위 clipId (index를 받아 결정적으로 선택 가능)

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../../store/appStore'
+import { t } from '../../i18n'
 
 export function NameInputScreen() {
   const [name, setName] = useState('')
   const createProfile = useAppStore(s => s.createProfile)
+  const lang = useAppStore(s => s.game.lang)
 
   const handleStart = async () => {
     if (name.trim().length < 1) return
@@ -21,17 +23,17 @@ export function NameInputScreen() {
       >
         <div style={{ fontSize: 60, marginBottom: 20 }}>🌱</div>
         <h2 style={{ fontSize: 32, marginBottom: 12, color: 'var(--color-accent)', fontFamily: 'var(--font-script)' }}>
-          만나서 반가워!
+          {t('name.title', lang)}
         </h2>
         <p style={{ color: 'var(--color-text-soft)', marginBottom: 32, fontSize: 18 }}>
-          너의 이름을 알려줄래?
+          {t('name.ask', lang)}
         </p>
 
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value.slice(0, 10))}
-          placeholder="이름"
+          placeholder={t('name.placeholder', lang)}
           maxLength={10}
           style={{
             width: '100%',
@@ -66,7 +68,7 @@ export function NameInputScreen() {
             transition: 'all 0.3s'
           }}
         >
-          정원 만들기 ✨
+          {t('action.start', lang)}
         </motion.button>
       </motion.div>
     </div>

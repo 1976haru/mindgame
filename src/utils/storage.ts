@@ -115,6 +115,9 @@ export interface GameState {
 
   // === v4.0 통합/폴리싱 (Phase 6) ===
   gardenTutorialSeen: boolean       // 자라는 정원 튜토리얼 완료 여부
+
+  // === v5.0 다국어 ===
+  lang: 'ko' | 'en' | 'ja'          // 표시/음성 언어 (기본 ko)
 }
 
 export interface PlacedDecoration {
@@ -207,7 +210,8 @@ export function defaultGameState(): GameState {
     harvestCount: 0,
     seenCreatures: [],
     lastWeatherWaterDate: '',
-    gardenTutorialSeen: false
+    gardenTutorialSeen: false,
+    lang: 'ko'
   }
 }
 

@@ -91,6 +91,7 @@ interface AppState {
   buyTheme: (themeId: string) => boolean
   setGardenTheme: (themeId: string) => void
   markGardenTutorialSeen: () => void
+  setLang: (lang: 'ko' | 'en' | 'ja') => void
 
   // 게임
   persistGame: () => Promise<void>
@@ -474,6 +475,13 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { game } = get()
     if (game.gardenTutorialSeen) return
     const next = { ...game, gardenTutorialSeen: true }
+    set({ game: next })
+    void saveGameState(next)
+  },
+
+  setLang: (lang) => {
+    const { game } = get()
+    const next = { ...game, lang }
     set({ game: next })
     void saveGameState(next)
   },
